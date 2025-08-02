@@ -5,7 +5,7 @@ const {
   createRoutine,
   updateRoutine,
   deleteRoutine,
-  resetRoutine,
+  // resetRoutine,
 } = require("../controllers/routineController");
 const authMiddleware = require("../middleware/authMiddleware");
 
@@ -15,6 +15,6 @@ router.get("/", getUserRoutines);
 router.post("/", createRoutine);
 router.put("/:taskId", updateRoutine);
 router.delete("/:taskId", deleteRoutine);
-router.patch("/reset", resetRoutine);
+// router.patch("/reset", resetRoutine);
 
 module.exports = router;
