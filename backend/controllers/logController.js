@@ -109,4 +109,96 @@ const getDailyLogs = async (req, res) => {
   }
 };
 
-module.exports = { markTaskCompleted, getDailyLogs };
+const getWeeklySummary = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const now = new Date();
+
+    // Get start of week (Sunday)
+    const startOfWeek = new Date(now);
+    const dayOfWeek = startOfWeek.getDay(); // Sunday = 0
+    startOfWeek.setDate(startOfWeek.getDate() - dayOfWeek);
+    startOfWeek.setHours(0, 0, 0, 0);
+
+    // End of week (Saturday)
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(endOfWeek.getDate() + 6);
+    endOfWeek.setHours(23, 59, 59, 999);
+
+    // Fetch logs
+    const logs = await TaskLog.find({
+      userId,
+      date: { $gte: startOfWeek, $lte: endOfWeek },
+    });
+
+    // Group logs by local date string
+    const grouped = {};
+    for (let i = 0; i < 7; i++) {
+      const current = new Date(startOfWeek.getTime());
+      current.setDate(current.getDate() + i);
+      const key = current.toLocaleDateString('en-CA'); // local YYYY-MM-DD
+      grouped[key] = [];
+    }
+
+    logs.forEach(log => {
+      const key = new Date(log.date).toLocaleDateString('en-CA');
+      if (grouped[key]) {
+        grouped[key].push(log);
+      }
+    });
+
+    res.status(200).json(grouped);
+  } catch (err) {
+    console.error("Weekly summary error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const getMonthlySummary = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    const year = parseInt(req.query.year);
+    const month = parseInt(req.query.month); // 0 = Jan, 11 = Dec
+
+    const now = new Date();
+
+    // Fallback to current month if params not provided
+    const targetYear = !isNaN(year) ? year : now.getFullYear();
+    const targetMonth = !isNaN(month) ? month : now.getMonth();
+
+    const startOfMonth = new Date(targetYear, targetMonth, 1);
+    const endOfMonth = new Date(targetYear, targetMonth + 1, 0, 23, 59, 59, 999);
+
+    const totalDays = endOfMonth.getDate();
+
+    // Initialize grouped object with empty days
+    const grouped = {};
+    for (let i = 1; i <= totalDays; i++) {
+      const current = new Date(targetYear, targetMonth, i);
+      const key = current.toLocaleDateString('en-CA'); // Format: YYYY-MM-DD
+      grouped[key] = [];
+    }
+
+    const logs = await TaskLog.find({
+      userId,
+      date: { $gte: startOfMonth, $lte: endOfMonth },
+    });
+
+    logs.forEach(log => {
+      const key = new Date(log.date).toLocaleDateString('en-CA');
+      if (grouped[key]) grouped[key].push(log);
+    });
+
+    res.status(200).json({
+      year: targetYear,
+      month: targetMonth,
+      days: grouped,
+    });
+  } catch (err) {
+    console.error("Monthly summary error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+module.exports = { markTaskCompleted, getDailyLogs, getWeeklySummary, getMonthlySummary };
