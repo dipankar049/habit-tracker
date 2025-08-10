@@ -1,4 +1,5 @@
 const RoutineTask = require("../models/RoutineTask");
+const TaskLog = require("../models/TaskLog");
 
 const createRoutine = async (req, res) => {
   try {
@@ -40,6 +41,125 @@ const createRoutine = async (req, res) => {
   } catch (err) {
     console.error("Error occurred:", err);
     res.status(500).json({ message: "Server error while adding task" });
+  }
+};
+
+const getTodaysRoutine = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    // Fetch all routine tasks
+    const routine = await RoutineTask.find({ userId });
+
+    // Get today's logs
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const todaysLog = await TaskLog.find({
+      userId,
+      date: { $gte: startOfDay, $lte: endOfDay }
+    });
+
+    // Map today's logs for quick lookup
+    const todayLogMap = new Map();
+    todaysLog.forEach(log => {
+      todayLogMap.set(log.taskId.toString(), log);
+    });
+
+    // Merge today's log data into routine
+    let tasks = routine.map(task => {
+      const log = todayLogMap.get(task._id.toString());
+      return {
+        ...task.toObject(),
+        completed: log ? log.completed : false,
+        defaultDuration: log ? log.timeSpent : task.defaultDuration,
+        isToday: false,  // default
+        daysLeft: null   // default
+      };
+    });
+
+    // Handle "fixed" frequency
+    const todayIdx = new Date().getDay();
+    tasks = tasks.map(task => {
+      if (task.frequency === "fixed") {
+        if (task.daysOfWeek.includes(todayIdx)) {
+          task.isToday = true;
+        }
+      }
+      return task;
+    });
+
+    // Handle "alternate" frequency → need yesterday's logs
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const startOfYesterday = new Date(yesterday);
+    startOfYesterday.setHours(0, 0, 0, 0);
+    const endOfYesterday = new Date(yesterday);
+    endOfYesterday.setHours(23, 59, 59, 999);
+
+    const yesterdaysLog = await TaskLog.find({
+      userId,
+      date: { $gte: startOfYesterday, $lte: endOfYesterday }
+    });
+
+    const yesterdayLogMap = new Map();
+    yesterdaysLog.forEach(log => {
+      yesterdayLogMap.set(log.taskId.toString(), log);
+    });
+
+    tasks = tasks.map(task => {
+      if (task.frequency === "alternate") {
+        const yesterdayLog = yesterdayLogMap.get(task._id.toString());
+        if (yesterdayLog && yesterdayLog.completed) {
+          task.isToday = false;
+        } else {
+          task.isToday = true;
+        }
+      }
+      return task;
+    });
+
+    // Handle "flexible" frequency → need weekly logs
+    const startOfWeek = new Date();
+    startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
+    startOfWeek.setHours(0, 0, 0, 0);
+
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(endOfWeek.getDate() + 6);
+    endOfWeek.setHours(23, 59, 59, 999);
+
+    const weeklyLogs = await TaskLog.find({
+      userId,
+      date: { $gte: startOfWeek, $lte: endOfWeek }
+    });
+
+    // Count completions per task
+    const weeklyCount = {};
+    weeklyLogs.forEach(log => {
+      if (log.completed) {
+        const id = log.taskId.toString();
+        weeklyCount[id] = (weeklyCount[id] || 0) + 1;
+      }
+    });
+
+    tasks = tasks.map(task => {
+      if (task.frequency === "flexible" && typeof task.timesPerWeek === "number") {
+        const completedCount = weeklyCount[task._id.toString()] || 0;
+        task.daysLeft = Math.max(task.timesPerWeek - completedCount, 0);
+        // when days left is 0 then isToday false
+        if(task.daysLeft > 0) task.isToday = true;
+      }
+      return task;
+    });
+
+    // Return final result
+    res.status(200).json(tasks);
+
+  } catch (err) {
+    console.error("Error occurred: ", err);
+    res.status(500).json({ error: "Something went wrong while fetching routine" });
   }
 };
 
@@ -124,4 +244,4 @@ const updateRoutine = async(req, res) => {
   }
 }
 
-module.exports = { createRoutine, getUserRoutines, deleteRoutine, updateRoutine };
+module.exports = { createRoutine, getUserRoutines, deleteRoutine, updateRoutine, getTodaysRoutine };
