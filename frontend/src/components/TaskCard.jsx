@@ -1,11 +1,45 @@
-export default function TaskCard({ task }) {
+export default function TaskCard({ task, setTasks, handleToggleStatus }) {
   return (
-    <div className="bg-white shadow-md rounded-lg p-4 flex justify-between items-center">
-      <div>
-        <h3 className="text-lg font-semibold">{task.title}</h3>
-        <p className="text-gray-500">{task.description}</p>
+    <div
+      key={task._id}
+      className="bg-white shadow rounded-lg p-4 flex flex-col md:flex-row md:items-center md:justify-between border border-gray-200"
+    >
+      <h2 className="text-lg font-semibold">{task.title}</h2>
+
+      <div className="flex items-center gap-3 mt-3 md:mt-0">
+        <input
+          type="number"
+          min="1"
+          className="border border-gray-300 rounded px-2 py-1 w-20"
+          value={task.defaultDuration}
+          disabled={task.completed}
+          onChange={(e) =>
+            setTasks((prev) =>
+              prev.map((t) =>
+                t._id === task._id
+                  ? { ...t, defaultDuration: Number(e.target.value) }
+                  : t
+              )
+            )
+          }
+        />
+
+        <button
+          onClick={() =>
+            handleToggleStatus(
+              task._id,
+              !task.completed,
+              task.defaultDuration
+            )
+          }
+          className={`px-3 py-1 rounded text-white ${task.completed
+              ? "bg-gray-500 hover:bg-gray-600"
+              : "bg-green-600 hover:bg-green-700"
+            }`}
+        >
+          {task.completed ? "Mark Pending" : "Mark Completed"}
+        </button>
       </div>
-      <span className="text-sm text-gray-400">{task.time}</span>
     </div>
-  );
+  )
 }

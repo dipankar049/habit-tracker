@@ -4,15 +4,13 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
+  const [token, setToken] = useState(() => localStorage.getItem("token"));
 
-  // Load user & token from localStorage when app starts
+  // Load user from localStorage when app starts
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
-    const storedToken = localStorage.getItem("token");
 
     if (storedUser) setUser(JSON.parse(storedUser));
-    if (storedToken) setToken(storedToken);
   }, []);
 
   const login = (userData, tokenValue) => {

@@ -17,6 +17,7 @@ export default function Register() {
         })
         .then((res) => {
             console.log(res.data.message);
+            navigate("/login", { replace: true });
         })
         .catch((err) => {
             if (err.response && err.response.data) {

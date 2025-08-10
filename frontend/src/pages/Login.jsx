@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../contexts/AuthContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Login() {
     const [form, setForm] = useState({ email: "", password: "" });
     const { login } = useAuth();
+    const navigate = useNavigate();
 
     const handleLogin = () => {
         axios.post(`${import.meta.env.VITE_NODE_URI}/auth/login`, {
@@ -15,7 +16,7 @@ export default function Login() {
         .then((res) => {
             console.log(res.data.message);
             login(res.data.user, res.data.token);
-            window.location.href = "/";
+            navigate("/", { replace: true });
         })
         .catch((err) => {
             if (err.response && err.response.data) {
