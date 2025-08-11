@@ -54,7 +54,7 @@ export default function SetRoutine() {
   }, [token]);
 
   return (
-    <div className="p-5 max-w-2xl mx-auto">
+    <div className="p-5">
       <h1 className="text-2xl font-bold mb-5">Your Routine Tasks</h1>
 
       {tasks.length ? (

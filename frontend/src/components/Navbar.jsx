@@ -1,11 +1,18 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
-export default function Navbar() {
+export default function Navbar({toggleSidebar}) {
     const { user, logout } = useAuth();
 
     return (
-        <div className='h-12 flex justify-between items-center py-2 px-4 shadow-xl'>
+        <div className='h-12 w-[100vw] flex justify-between items-center py-2 px-4 shadow-xl fixed'>
+            {/* Hamburger menu - visible on small screens */}
+            <button
+                className="md:hidden mr-4 text-2xl"
+                onClick={toggleSidebar}
+            >
+                ☰
+            </button>
             <p className='font-bold sm:font-extrabold text-2xl text-shadow-lg'>
                 <span className='text-blue-500'>Habit</span>
                 <span className='text-gray-800'>Tracker</span>

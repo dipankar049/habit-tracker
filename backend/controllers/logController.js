@@ -114,9 +114,9 @@ const getWeeklySummary = async (req, res) => {
     const userId = req.user._id;
     const now = new Date();
 
-    // Get start of week (Sunday)
+    // Start of week (Sunday)
     const startOfWeek = new Date(now);
-    const dayOfWeek = startOfWeek.getDay(); // Sunday = 0
+    const dayOfWeek = startOfWeek.getDay();
     startOfWeek.setDate(startOfWeek.getDate() - dayOfWeek);
     startOfWeek.setHours(0, 0, 0, 0);
 
@@ -125,21 +125,23 @@ const getWeeklySummary = async (req, res) => {
     endOfWeek.setDate(endOfWeek.getDate() + 6);
     endOfWeek.setHours(23, 59, 59, 999);
 
-    // Fetch logs
+    // Fetch logs & populate task title
     const logs = await TaskLog.find({
       userId,
       date: { $gte: startOfWeek, $lte: endOfWeek },
-    });
+    }).populate("taskId", "title"); 
+    // "title" is the field in RoutineTask you want — adjust if your schema calls it differently
 
-    // Group logs by local date string
+    // Prepare empty grouped structure for each day
     const grouped = {};
     for (let i = 0; i < 7; i++) {
       const current = new Date(startOfWeek.getTime());
       current.setDate(current.getDate() + i);
-      const key = current.toLocaleDateString('en-CA'); // local YYYY-MM-DD
+      const key = current.toLocaleDateString('en-CA');
       grouped[key] = [];
     }
 
+    // Fill grouped with logs
     logs.forEach(log => {
       const key = new Date(log.date).toLocaleDateString('en-CA');
       if (grouped[key]) {
@@ -147,58 +149,118 @@ const getWeeklySummary = async (req, res) => {
       }
     });
 
-    res.status(200).json(grouped);
+    // Convert to final array format
+    const result = Object.entries(grouped).map(([date, tasks]) => {
+      const totalMinutes = tasks.reduce((sum, t) => sum + (t.timeSpent || 0), 0);
+      return {
+        date,
+        totalHours: +(totalMinutes / 60).toFixed(2),
+        tasks: tasks.map(t => ({
+          ...t.toObject(),
+          taskName: t.taskId?.title || "Unnamed Task" // Add taskName for frontend
+        }))
+      };
+    });
+
+    res.status(200).json(result);
+
   } catch (err) {
     console.error("Weekly summary error:", err);
     res.status(500).json({ message: "Server error" });
   }
 };
 
+
+
+// controller/getMonthlySummary.js
 const getMonthlySummary = async (req, res) => {
   try {
     const userId = req.user._id;
+    const userCreatedAt = req.user.joinDate;
 
     const year = parseInt(req.query.year);
     const month = parseInt(req.query.month); // 0 = Jan, 11 = Dec
 
     const now = new Date();
+    const targetYear = !isNaN(year) ? year : now.getUTCFullYear();
+    const targetMonth = !isNaN(month) ? month : now.getUTCMonth();
 
-    // Fallback to current month if params not provided
-    const targetYear = !isNaN(year) ? year : now.getFullYear();
-    const targetMonth = !isNaN(month) ? month : now.getMonth();
+    // UTC boundaries
+    const startOfMonth = new Date(Date.UTC(targetYear, targetMonth, 1, 0, 0, 0, 0));
+    const endOfMonth = new Date(Date.UTC(targetYear, targetMonth + 1, 0, 23, 59, 59, 999));
 
-    const startOfMonth = new Date(targetYear, targetMonth, 1);
-    const endOfMonth = new Date(targetYear, targetMonth + 1, 0, 23, 59, 59, 999);
-
-    const totalDays = endOfMonth.getDate();
-
-    // Initialize grouped object with empty days
+    const totalDays = new Date(Date.UTC(targetYear, targetMonth + 1, 0)).getUTCDate();
     const grouped = {};
     for (let i = 1; i <= totalDays; i++) {
-      const current = new Date(targetYear, targetMonth, i);
-      const key = current.toLocaleDateString('en-CA'); // Format: YYYY-MM-DD
+      const key = new Date(Date.UTC(targetYear, targetMonth, i)).toISOString().split("T")[0];
       grouped[key] = [];
     }
 
     const logs = await TaskLog.find({
       userId,
       date: { $gte: startOfMonth, $lte: endOfMonth },
+    }).populate("taskId", "title");
+
+    const tasksMap = new Map();
+
+    logs.forEach((logDoc) => {
+      const log = logDoc.toObject ? logDoc.toObject() : logDoc;
+      const key = new Date(log.date).toISOString().split("T")[0];
+      if (!grouped[key]) grouped[key] = [];
+
+      const taskId = log.taskId?._id ? String(log.taskId._id) : String(log.taskId);
+      const taskTitle = log.taskId?.title || "Untitled Task";
+
+      const enriched = {
+        _id: log._id,
+        taskId,
+        taskTitle,
+        date: log.date,
+        completed: !!log.completed,
+        timeSpent: Number(log.timeSpent || 0), // in minutes
+        xpEarned: Number(log.xpEarned || 0),
+        isSpecialTask: !!log.isSpecialTask,
+      };
+
+      grouped[key].push(enriched);
+
+      if (taskId) {
+        if (!tasksMap.has(taskId)) {
+          tasksMap.set(taskId, {
+            taskId,
+            title: taskTitle,
+            completedDays: new Set(),
+            totalMinutes: 0,
+          });
+        }
+        const t = tasksMap.get(taskId);
+        t.totalMinutes += enriched.timeSpent;
+        t.completedDays.add(Number(key.split("-")[2]));
+      }
     });
 
-    logs.forEach(log => {
-      const key = new Date(log.date).toLocaleDateString('en-CA');
-      if (grouped[key]) grouped[key].push(log);
-    });
+    const tasks = Array.from(tasksMap.values())
+      .map((t) => ({
+        taskId: t.taskId,
+        title: t.title,
+        totalMinutes: t.totalMinutes,
+        completedDays: Array.from(t.completedDays).sort((a, b) => a - b),
+      }))
+      .sort((a, b) => a.title.localeCompare(b.title));
 
     res.status(200).json({
       year: targetYear,
       month: targetMonth,
       days: grouped,
+      tasks,
+      userCreatedAt,
     });
   } catch (err) {
     console.error("Monthly summary error:", err);
     res.status(500).json({ message: "Server error" });
   }
 };
+
+
 
 module.exports = { markTaskCompleted, getDailyLogs, getWeeklySummary, getMonthlySummary };

@@ -16,7 +16,6 @@ export default function Home() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setTasks(res.data);
-      console.log(res.data);
     } catch (err) {
       console.log(err.response?.data?.message || err.message);
     }
@@ -50,7 +49,7 @@ export default function Home() {
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto space-y-8">
+    <div className="p-6 space-y-8">
       {/* Header */}
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-800">My Routine</h1>
