@@ -26,7 +26,6 @@ export default function Summary() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setSummaryData(res.data);
-      console.log(res.data);
     } catch (error) {
       console.error("Error fetching monthly summary:", error);
     } finally {

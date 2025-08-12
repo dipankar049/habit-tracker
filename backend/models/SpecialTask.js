@@ -13,14 +13,19 @@ const specialTaskSchema = new mongoose.Schema({
     trim: true,
   },
 
+  description: {
+    type: String,
+    trim: true,
+  },
+
   scheduledDate: {
     type: Date,
     required: true,
   },
 
-  expectedDuration: {
-    type: Number, // in minutes
-    default: 0,
+  endDate: {
+    type: Date,  // optional, for multi-day task
+    default: null,
   },
 
   completed: {
@@ -28,15 +33,14 @@ const specialTaskSchema = new mongoose.Schema({
     default: false,
   },
 
-  timeSpent: {
-    type: Number,
-    default: 0,
+  completedAt: {
+    type: Date,  // when task was completed
   },
 
   createdAt: {
     type: Date,
     default: Date.now,
-  }
+  },
 });
 
 specialTaskSchema.index({ userId: 1, scheduledDate: 1 });

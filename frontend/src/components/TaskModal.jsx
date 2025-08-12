@@ -81,9 +81,9 @@ export default function TaskModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white w-full max-w-md p-6 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold mb-4">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/10 backdrop-blur-xs">
+      <div className="w-full max-w-md sm:mx-0 mx-6 bg-white p-6 rounded-xl">
+        <h2 className="text-xl sm:text-2xl font-bold mb-4">
           {mode === "add" ? "Add Routine Task" : "Update Routine Task"}
         </h2>
 
@@ -99,7 +99,7 @@ export default function TaskModal({
             placeholder="Task title"
             value={form.title}
             onChange={(e) => setForm({ ...form, title: e.target.value })}
-            className="w-full p-2 border rounded mb-3"
+            className="w-full px-2 p-1 sm:py-2 border rounded mb-3"
             required
           />
 
@@ -121,7 +121,7 @@ export default function TaskModal({
               if (value > 300) value = 300;
               setForm({ ...form, defaultDuration: value });
             }}
-            className="w-full p-2 border rounded mb-3"
+            className="w-full px-2 p-1 sm:py-2 border rounded mb-3"
             required
           />
 
@@ -129,7 +129,7 @@ export default function TaskModal({
           <select
             value={form.frequency}
             onChange={(e) => setForm({ ...form, frequency: e.target.value })}
-            className="w-full p-2 border rounded mb-3"
+            className="w-full px-2 p-1 sm:py-2 border rounded mb-3"
           >
             <option value="fixed">Fixed</option>
             <option value="flexible">Flexible</option>
@@ -167,7 +167,7 @@ export default function TaskModal({
                 const value = Math.min(7, Math.max(1, Number(e.target.value)));
                 setForm({ ...form, timesPerWeek: parseInt(value) });
               }}
-              className="w-full p-2 border rounded mb-3"
+              className="w-full px-2 p-1 sm:py-2 border rounded mb-3"
               required
             />
           )}
@@ -180,7 +180,7 @@ export default function TaskModal({
             onChange={(e) =>
               setForm({ ...form, tags: e.target.value.split(",") })
             }
-            className="w-full p-2 border rounded mb-3"
+            className="w-full px-2 p-1 sm:py-2 border rounded mb-3"
           />
 
           {/* Buttons */}

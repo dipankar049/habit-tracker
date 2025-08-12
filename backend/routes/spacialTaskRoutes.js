@@ -5,14 +5,16 @@ const {
   addEvent,
   updateEvent,
   deleteEvent,
-} = require("../controllers/calendarController");
+  getTodayEvents,
+} = require("../controllers/SpecialTaskController");
 const authMiddleware = require("../middleware/authMiddleware");
 
 router.use(authMiddleware);
 
 router.get("/", getEvents);
 router.post("/", addEvent);
-router.put("/:eventId", updateEvent);
+router.put("/", updateEvent);
 router.delete("/:eventId", deleteEvent);
+router.get("/todayEvents", getTodayEvents);
 
 module.exports = router;

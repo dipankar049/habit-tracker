@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import axios from "axios";
 import TaskModal from "../components/TaskModal";
+import { Plus } from "lucide-react";
 
 export default function SetRoutine() {
   const [tasks, setTasks] = useState([]);
   const [selectedTask, setSelectedTask] = useState(null);
   const { token } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTaskAddModalOpen, setIsTaskAddModalOpen] = useState(false);
 
   const fetchRoutine = async () => {
     try {
@@ -54,9 +56,23 @@ export default function SetRoutine() {
   }, [token]);
 
   return (
-    <div className="p-5">
-      <h1 className="text-2xl font-bold mb-5">Your Routine Tasks</h1>
+    <div>
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-xl sm:text-2xl font-bold">Your Routine Tasks</h1>
+        <button
+          onClick={() => setIsTaskAddModalOpen(true)}
+          className="px-3 sm:px-5 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 shadow-md transition flex items-center gap-1"
+        >
+          <Plus size={18} />
+          <span className="hidden sm:inline">Add Task</span>
+        </button>
+      </div>
 
+      <TaskModal
+        isOpen={isTaskAddModalOpen}
+        onClose={() => setIsTaskAddModalOpen(false)}
+        onTaskSaved={fetchRoutine}
+      />
       {tasks.length ? (
         <div className="flex flex-col gap-3">
           {tasks.map((task) => (
@@ -89,7 +105,7 @@ export default function SetRoutine() {
 
 function TaskCard({ task, onDelete, onUpdate }) {
   return (
-    <div className="bg-white shadow rounded-lg p-4 flex justify-between items-center border border-gray-200">
+    <div className="bg-white shadow rounded-lg px-4 py-2 flex justify-between items-center border border-gray-200">
       {/* Left side - task info */}
       <div>
         <h3 className="text-lg font-bold">{task.title}</h3>
@@ -105,20 +121,21 @@ function TaskCard({ task, onDelete, onUpdate }) {
       </div>
 
       {/* Right side - buttons */}
-      <div className="flex gap-2">
-        <button
-          onClick={onUpdate}
-          className="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
-        >
-          Update
-        </button>
-        <button
-          onClick={onDelete}
-          className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-        >
-          Delete
-        </button>
-      </div>
+      <div className="flex gap-2 flex-wrap">
+  <button
+    onClick={onUpdate}
+    className="px-2 py-1 text-xs sm:px-3 sm:py-1 sm:text-sm bg-yellow-500 text-white rounded hover:bg-yellow-600 transition"
+  >
+    Update
+  </button>
+  <button
+    onClick={onDelete}
+    className="px-2 py-1 text-xs sm:px-3 sm:py-1 sm:text-sm bg-red-500 text-white rounded hover:bg-red-600 transition"
+  >
+    Delete
+  </button>
+</div>
+
     </div>
   );
 }

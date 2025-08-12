@@ -10,7 +10,8 @@ export default function Menubar({ isOpen, closeSidebar }) {
     { label: "Calender", to: "/calender" },
     { label: "Weekly Summery", to: "/weeklySummery" },
     { label: "Summery", to: "/summery" },
-    { label: "Restore", to: "/restore" }
+    // { label: "Restore", to: "/restore" },
+    { label: "Contact Us", to: "/contact" },
   ];
 
   return (
@@ -26,7 +27,7 @@ export default function Menubar({ isOpen, closeSidebar }) {
 
       {/* Mobile sidebar */}
       {isOpen && (
-        <div className="fixed z-40 top-16 left-0 w-4/5 max-w-xs h-full bg-white border-r border-gray-300 shadow-lg md:hidden dark:bg-gray-800 dark:text-white transition-all">
+        <div className="fixed z-40 top-12 left-0 w-4/5 max-w-xs h-full bg-white border-r border-gray-300 shadow-lg md:hidden dark:bg-gray-800 dark:text-white transition-all">
           <div className="p-2 space-y-1">
             {menuItems.map(({ label, to }) => (
               <MenuItem key={to} label={label} to={to} onClick={closeSidebar} />

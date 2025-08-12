@@ -1,0 +1,65 @@
+.rbc-event {
+    background-color: #63cccc;
+    font-weight: 500;
+    border: 1px solid black;
+}
+
+.rbc-event-content span{
+    color: black;
+}
+
+.rbc-header {
+    background-color: #282D3C;
+    color: white;
+    height: 35px;
+    border-radius: 4px;
+    font-size: large;
+    font-family: serif;
+    padding-top: 2px;
+    border: 2px solid black;
+    margin-bottom: 1px;
+}
+
+.rbc-day-bg {
+    /* background-color: #F1EA7F; */
+    /* background-color: rgba(236, 235, 235, 0.832); */
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 4px;
+    /* font-weight: bold; */
+    /* margin-left: 1px; */
+}
+
+.rbc-today {
+    background-color: #dcfce7;
+    /* color: blue; */
+}
+
+.rbc-button-link {
+    font-weight: bold;
+}
+
+.rbc-btn-group {
+    border: 1px solid black;
+    border-radius: 4px;
+    font-weight: bold;
+    background-color: white;
+}
+
+.rbc-toolbar-label {
+    font-size: large;
+    font-weight: bold;
+    color: rgb(96, 95, 95);
+}
+
+.rbc-time-view {
+    border: 2px solid black;
+}
+
+.rbc-time-content {
+    border: 1px solid black;
+}
+
+.rbc-label {
+    /* border: 2px solid black; */
+}
