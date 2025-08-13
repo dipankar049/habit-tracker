@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
-import TaskModal from "../components/TaskModal";
 import TaskCard from "../components/TaskCard";
 import EventCard from "../components/EventCard";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   const [tasks, setTasks] = useState([]);
@@ -66,63 +66,77 @@ export default function Home() {
     <div className="space-y-4 sm:space-y-8">
       {/* Header */}
       <div className="text-center">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">My Routine</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 text-shadow-lg/10">My Routine</h1>
       </div>
 
 
       {/* Today's Tasks */}
-      <section>
-        <h2 className="text-lg sm:text-xl font-semibold text-green-700 mb-4 flex items-center gap-2">
-          ✅ Today’s Tasks
-        </h2>
-        <div className="space-y-4">
-          {events &&
-            events.map((event) => (
-              <EventCard
-                key={event._id}
-                event={event}
-              />
-            ))
-          }
-          {tasks.filter(task => task.isToday).length === 0 ? (
-            <p className="text-gray-500 italic">No tasks scheduled for today.</p>
-          ) : (
-            tasks
-              .filter(task => task.isToday)
-              .map((task) => (
-                <TaskCard
-                  key={task._id}
-                  task={task}
-                  setTasks={setTasks}
-                  handleToggleStatus={handleToggleStatus}
-                />
-              ))
-          )}
+      {tasks.length === 0 ?
+        <div className="flex flex-col items-center mt-40">
+          <p className="text-center">No task found</p>
+          <Link
+            to="/routine"
+            className="px-4 sm:text-base py-2 mt-2 sm:mt-4 text-sm sm:text-md rounded text-white shadow-lg/30 bg-green-600 hover:bg-green-700"
+          >
+            Set Routine
+          </Link>
         </div>
-      </section>
+        :
+        (<div>
+          <section>
+            <h2 className="text-lg sm:text-xl font-semibold text-green-700 mb-4 flex items-center gap-2">
+              ✅ Today’s Tasks
+            </h2>
+            <div className="space-y-4">
+              {events &&
+                events.map((event) => (
+                  <EventCard
+                    key={event._id}
+                    event={event}
+                  />
+                ))
+              }
+              {tasks.filter(task => task.isToday).length === 0 ? (
+                <p className="text-gray-500 italic">No tasks scheduled for today.</p>
+              ) : (
+                tasks
+                  .filter(task => task.isToday)
+                  .map((task) => (
+                    <TaskCard
+                      key={task._id}
+                      task={task}
+                      setTasks={setTasks}
+                      handleToggleStatus={handleToggleStatus}
+                    />
+                  ))
+              )}
+            </div>
+          </section>
 
-      {/* Other Tasks */}
-      <section>
-        <h2 className="text-xl font-semibold text-gray-700 mb-4 flex items-center gap-2 mt-4">
-          📋 Other Tasks
-        </h2>
-        <div className="space-y-4">
-          {tasks.filter(task => !task.isToday).length === 0 ? (
-            <p className="text-gray-500 italic">No other tasks available.</p>
-          ) : (
-            tasks
-              .filter(task => !task.isToday)
-              .map((task) => (
-                <TaskCard
-                  key={task._id}
-                  task={task}
-                  setTasks={setTasks}
-                  handleToggleStatus={handleToggleStatus}
-                />
-              ))
-          )}
+
+          <section>
+            <h2 className="text-xl font-semibold text-gray-700 mb-4 flex items-center gap-2 mt-4">
+              📋 Other Tasks
+            </h2>
+            <div className="space-y-4">
+              {tasks.filter(task => !task.isToday).length === 0 ? (
+                <p className="text-gray-500 italic">No other tasks available.</p>
+              ) : (
+                tasks
+                  .filter(task => !task.isToday)
+                  .map((task) => (
+                    <TaskCard
+                      key={task._id}
+                      task={task}
+                      setTasks={setTasks}
+                      handleToggleStatus={handleToggleStatus}
+                    />
+                  ))
+              )}
+            </div>
+          </section>
         </div>
-      </section>
+        )}
     </div>
   );
 };

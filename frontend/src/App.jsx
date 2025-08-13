@@ -31,9 +31,9 @@ function AppWrapper() {
     <>
       {!hideNavbarPaths.includes(location.pathname) && <Navbar toggleSidebar={toggleSidebar} />}
 
-      <div className="h-[100vh] pt-12 flex">
+      <div className="min-h-[100vh] pt-12 flex">
         {!hideNavbarPaths.includes(location.pathname) && <Menubar isOpen={sidebarOpen} closeSidebar={closeSidebar} />}
-          <div className='w-full md:ml-[20%] p-4 sm:p-8'>
+          <div className='w-full md:ml-[20%] p-4 bg-linear-to-br from-gray-200 via-white to-gray-400 sm:p-8'>
             <Routes>
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />

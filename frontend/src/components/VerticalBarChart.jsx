@@ -26,7 +26,7 @@ export default function VerticalBarChart({ tasks }) {
                 layout="vertical"
                 data={tasks}
                 margin={{ top: 20, right: 30, left: 100, bottom: 20 }}
-                barSize={20}
+                barSize={30}
             >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis

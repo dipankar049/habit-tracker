@@ -7,17 +7,21 @@ export default function MonthlyTaskMatrix({ data }) {
   const daysArray = Array.from({ length: daysInMonth }, (_, i) => i + 1);
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto p-2">
       <div
-        className="inline-grid border"
-        style={{ gridTemplateColumns: `200px repeat(${daysInMonth}, 1fr)` }}
+        className="inline-grid border rounded-md"
+        style={{
+          gridTemplateColumns: `140px repeat(${daysInMonth}, minmax(20px, 1fr))`,
+        }}
       >
         {/* Header row */}
-        <div className="bg-gray-200 font-semibold px-2 py-1">Task</div>
+        <div className="bg-gray-200 font-bold px-2 py-1 text-xs sm:text-base sticky left-0 z-20">
+          Task
+        </div>
         {daysArray.map((day) => (
           <div
             key={day}
-            className="bg-gray-200 text-center font-semibold px-1 py-1 border-l"
+            className="bg-gray-200 text-center font-semibold text-[10px] sm:text-xs border-l sticky top-0 z-10"
           >
             {day}
           </div>
@@ -27,31 +31,40 @@ export default function MonthlyTaskMatrix({ data }) {
         {tasks.map((task) => (
           <React.Fragment key={task.taskId}>
             {/* Task name */}
-            <div className="bg-gray-50 border-t px-2 py-1 text-sm">
+            <div className="bg-gray-50 border-t px-2 py-1 text-[11px] sm:text-xs sticky left-0 z-10 truncate">
               {task.title}
             </div>
 
             {daysArray.map((day) => {
-              const dateKey = new Date(year, month, day).toISOString().split("T")[0];
-              const logEntry = days[dateKey]?.find((entry) => entry.taskId === task.taskId);
+              const dateKey = new Date(year, month, day)
+                .toISOString()
+                .split("T")[0];
+              const logEntry = days[dateKey]?.find(
+                (entry) => entry.taskId === task.taskId
+              );
 
               const isCompleted = logEntry?.completed ?? false;
               const minutes = logEntry?.timeSpent ?? 0;
 
+              // Heatmap intensity
+              const intensity = isCompleted
+                ? minutes >= 60
+                  ? "bg-green-700"
+                  : minutes >= 30
+                  ? "bg-green-500"
+                  : "bg-green-300"
+                : "bg-gray-100";
+
               return (
                 <div
                   key={day}
-                  className={`border-t border-l h-8 flex items-center justify-center cursor-pointer transition-colors duration-150 ${
-                    isCompleted
-                      ? "bg-green-500 hover:bg-green-600 text-white"
-                      : "bg-gray-100 hover:bg-gray-200"
-                  }`}
+                  className={`border-t border-l w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center cursor-pointer ${intensity} hover:scale-105 transition-transform duration-150`}
                   title={
                     isCompleted
                       ? `${minutes} min spent`
                       : logEntry
-                        ? `${minutes} min (not completed)`
-                        : "No data"
+                      ? `${minutes} min (not completed)`
+                      : "No data"
                   }
                 ></div>
               );

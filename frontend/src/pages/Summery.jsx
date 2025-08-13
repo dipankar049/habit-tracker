@@ -79,7 +79,8 @@ export default function Summary() {
           onClick={handlePrevMonth}
           className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
         >
-          ◀ Prev
+          ❮❮
+          <span className="hidden sm:inline"> Prev</span>
         </button>
         <h1 className="text-2xl font-bold">
           {new Date(year, month).toLocaleString("default", { month: "long" })} {year}
@@ -88,7 +89,8 @@ export default function Summary() {
           onClick={handleNextMonth}
           className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
         >
-          Next ▶
+          <span className="hidden sm:inline">Next </span>
+          ❯❯
         </button>
       </div>
 
@@ -96,7 +98,10 @@ export default function Summary() {
       {loading && <p>Loading summary...</p>}
 
       {/* Matrix */}
-      {summaryData && <MonthlyTaskMatrix data={summaryData} />}
+      {summaryData?.tasks.length === 0 ? 
+        <p className="text-center mt-40">No tasks log found</p>
+        : summaryData && <MonthlyTaskMatrix data={summaryData}
+      />}
     </div>
   );
 }

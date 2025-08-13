@@ -2,7 +2,7 @@ export default function TaskCard({ task, setTasks, handleToggleStatus }) {
   return (
     <div
       key={task._id}
-      className="bg-white shadow rounded-lg py-2 px-4 flex flex-col md:flex-row md:items-center md:justify-between border border-gray-200"
+      className="bg-white shadow-lg/30 rounded-lg py-2 px-4 flex flex-col md:flex-row md:items-center md:justify-between border border-gray-200"
     >
       <h2 className="text-lg font-semibold">{task.title}</h2>
 
@@ -32,7 +32,7 @@ export default function TaskCard({ task, setTasks, handleToggleStatus }) {
               task.defaultDuration
             )
           }
-          className={`px-3 py-1 text-sm sm:text-md rounded text-white ${task.completed
+          className={`px-3 py-1 text-sm sm:text-md rounded text-white shadow-lg/30 ${task.completed
               ? "bg-gray-500 hover:bg-gray-600"
               : "bg-green-600 hover:bg-green-700"
             }`}

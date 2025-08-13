@@ -41,33 +41,36 @@ export default function WeeklySummary() {
   const selectedDayData = summary.find((item) => item.date === selectedDate);
 
   return (
-    <div className="bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
-        Weekly Summary
-      </h2>
+    <div>
+      <div className="bg-white rounded-lg shadow-md py-4">
+        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
+          Weekly Summary
+        </h2>
 
-      <div className="w-full h-64 sm:h-80">
-        <HorizontalBarChart
-          data={summary}
-          selectedDate={selectedDate}
-          onBarClick={setSelectedDate}
-        />
+        <div className="w-full h-64 sm:h-80">
+          <HorizontalBarChart
+            data={summary}
+            selectedDate={selectedDate}
+            onBarClick={setSelectedDate}
+          />
+        </div>
+
+        <p className="text-center mt-4 text-gray-600 mb-8">
+          Total time spent per day on your tasks.
+        </p>
       </div>
+      <div className="bg-white rounded-lg shadow-md mt-4 py-4">
+        <h3 className="text-xl font-semibold mb-4 text-gray-700 text-center">
+          Task Breakdown for {selectedDayData ? selectedDayData.dayName : ""}
+        </h3>
 
-      <p className="text-center mt-4 text-gray-600 mb-8">
-        Total time spent per day on your tasks.
-      </p>
-
-      <h3 className="text-xl font-semibold mb-4 text-gray-700 text-center">
-        Task Breakdown for {selectedDayData ? selectedDayData.dayName : ""}
-      </h3>
-
-      <div className="w-full h-64 sm:h-80 -ml-14">
-        {selectedDayData && selectedDayData.tasks.length > 0 ? (
-          <VerticalBarChart tasks={selectedDayData.tasks} />
-        ) : (
-          <p className="text-center text-gray-500">No tasks logged for this day.</p>
-        )}
+        <div className="w-full h-64 sm:h-80 -ml-14">
+          {selectedDayData && selectedDayData.tasks.length > 0 ? (
+            <VerticalBarChart tasks={selectedDayData.tasks} />
+          ) : (
+            <p className="text-center text-gray-500">No tasks logged for this day.</p>
+          )}
+        </div>
       </div>
     </div>
   );

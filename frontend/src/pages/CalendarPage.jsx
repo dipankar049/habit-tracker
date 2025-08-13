@@ -26,8 +26,8 @@ export default function CalendarPage() {
   const { token } = useAuth();
 
   const [events, setEvents] = useState([]);
-  const [currentDate, setCurrentDate] = useState(new Date()); // controlled date
-  const [currentView, setCurrentView] = useState("month"); // controlled view
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentView, setCurrentView] = useState("month");
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -81,14 +81,12 @@ export default function CalendarPage() {
   useEffect(() => {
     const [s, e] = getRangeFor(currentView, currentDate);
     fetchEvents(s, e);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // run once on mount
+  }, []);
 
   // whenever date or view changes, refresh events
   useEffect(() => {
     const [s, e] = getRangeFor(currentView, currentDate);
     fetchEvents(s, e);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentDate, currentView, token]);
 
   // Open Add Event modal on single click on empty slot
@@ -185,7 +183,7 @@ export default function CalendarPage() {
 
   return (
     <div>
-      <h1 className="mb-4 text-center text-3xl font-bold">Calender</h1>
+      <h1 className="mb-4 text-center text-2xl sm:text-3xl font-bold">Calender</h1>
       <div style={{ height: "700px" }}>
         <Calendar
           localizer={localizer}

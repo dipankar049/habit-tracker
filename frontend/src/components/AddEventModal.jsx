@@ -48,7 +48,7 @@ export default function AddEventModal({ isOpen, onClose, slotInfo, token, refres
       className="modal"
       overlayClassName="overlay"
     >
-      <h2>Add Task</h2>
+      <h2 className="text-xl font-bold">Add Event</h2>
 
       <input
         type="text"

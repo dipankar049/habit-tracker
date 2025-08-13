@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Register() {
     const [form, setForm] = useState({ 
@@ -8,6 +8,7 @@ export default function Register() {
         email: "",
         password: ""
     });
+    const navigate = useNavigate();
 
     const handleRegister = () => {
         axios.post(`${import.meta.env.VITE_NODE_URI}/auth/register`, {
@@ -29,7 +30,7 @@ export default function Register() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 flex items-center justify-center px-4 font-sans">
+        <div className="min-h-screen -my-16 -mx-4 md:-ml-[32%] md:-mr-[4%] sm:-mt-20 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 flex items-center justify-center px-8 sm:px-4 font-sans">
             <div className="backdrop-blur-md bg-white/10 border border-white/20 shadow-xl rounded-2xl p-8 w-full max-w-md text-white">
                 <h2 className="text-3xl font-bold text-center mb-6 tracking-wide">Create Account ✨</h2>
 

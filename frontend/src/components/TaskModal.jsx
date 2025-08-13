@@ -82,7 +82,7 @@ export default function TaskModal({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/10 backdrop-blur-xs">
-      <div className="w-full max-w-md sm:mx-0 mx-6 bg-white p-6 rounded-xl">
+      <div className="w-full max-w-md sm:mx-0 mx-6 bg-linear-to-br from-gray-200 via-white to-gray-300 p-6 rounded-xl">
         <h2 className="text-xl sm:text-2xl font-bold mb-4">
           {mode === "add" ? "Add Routine Task" : "Update Routine Task"}
         </h2>

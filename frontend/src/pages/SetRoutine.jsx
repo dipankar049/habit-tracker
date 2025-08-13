@@ -57,11 +57,11 @@ export default function SetRoutine() {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-xl sm:text-2xl font-bold">Your Routine Tasks</h1>
+      <div className="flex justify-between items-center my-4">
+        <h1 className="text-2xl sm:text-3xl font-bold text-shadow-lg/10">Manage Routine</h1>
         <button
           onClick={() => setIsTaskAddModalOpen(true)}
-          className="px-3 sm:px-5 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 shadow-md transition flex items-center gap-1"
+          className="px-3 sm:px-5 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 shadow-xl/30 transition flex items-center gap-1"
         >
           <Plus size={18} />
           <span className="hidden sm:inline">Add Task</span>
@@ -105,7 +105,7 @@ export default function SetRoutine() {
 
 function TaskCard({ task, onDelete, onUpdate }) {
   return (
-    <div className="bg-white shadow rounded-lg px-4 py-2 flex justify-between items-center border border-gray-200">
+    <div className="bg-white shadow-lg/30 rounded-lg px-4 py-2 flex justify-between items-center border border-gray-200">
       {/* Left side - task info */}
       <div>
         <h3 className="text-lg font-bold">{task.title}</h3>
@@ -124,13 +124,13 @@ function TaskCard({ task, onDelete, onUpdate }) {
       <div className="flex gap-2 flex-wrap">
   <button
     onClick={onUpdate}
-    className="px-2 py-1 text-xs sm:px-3 sm:py-1 sm:text-sm bg-yellow-500 text-white rounded hover:bg-yellow-600 transition"
+    className="px-2 py-1 text-xs sm:px-3 sm:py-1 sm:text-sm bg-yellow-500 text-white rounded hover:bg-yellow-600 transition shadow-lg/20"
   >
     Update
   </button>
   <button
     onClick={onDelete}
-    className="px-2 py-1 text-xs sm:px-3 sm:py-1 sm:text-sm bg-red-500 text-white rounded hover:bg-red-600 transition"
+    className="px-2 py-1 text-xs sm:px-3 sm:py-1 sm:text-sm bg-red-500 text-white rounded hover:bg-red-600 transition shadow-lg/20"
   >
     Delete
   </button>
