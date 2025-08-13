@@ -7,7 +7,7 @@ const cors = require('cors');
 dbConnection();
 
 app.use(cors({
-  origin: ['https://habit-tracker-wx7h.vercel.app/', 'http://localhost:5173'],
+  origin: ['https://habit-tracker-wx7h.vercel.app', 'http://localhost:5173'],
   credentials: true
 }));
 app.use(express.json());
