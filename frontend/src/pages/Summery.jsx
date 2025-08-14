@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import MonthlyTaskMatrix from "../components/MonthlyTaskMatrix";
 import { useAuth } from "../contexts/AuthContext";
+import Loading from "../components/hierarchy/Loading";
 
 export default function Summary() {
   const { token } = useAuth();
@@ -95,7 +96,7 @@ export default function Summary() {
       </div>
 
       {/* Loading */}
-      {loading && <p>Loading summary...</p>}
+      {loading && <Loading message="Loading summery..." />}
 
       {/* Matrix */}
       {summaryData?.tasks.length === 0 ? 

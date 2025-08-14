@@ -7,26 +7,28 @@ export default function Login() {
     const [form, setForm] = useState({ email: "deep@gmail.com", password: "654321" });
     const { login } = useAuth();
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
 
     const handleLogin = () => {
+        setLoading(true);
         axios.post(`${import.meta.env.VITE_NODE_URI}/auth/login`, {
             email: form.email,
             password: form.password
         })
-        .then((res) => {
-            console.log(res.data.message);
-            login(res.data.user, res.data.token);
-            navigate("/", { replace: true });
-        })
-        .catch((err) => {
-            if (err.response && err.response.data) {
-                console.log(err.response.data.message || err.response.data.error);
-            } else {
-                console.log("Unknown error:", err.message);
-            }
-        });
+            .then((res) => {
+                console.log(res.data.message);
+                login(res.data.user, res.data.token);
+                navigate("/", { replace: true });
+            })
+            .catch((err) => {
+                if (err.response && err.response.data) {
+                    console.log(err.response.data.message || err.response.data.error);
+                } else {
+                    console.log("Unknown error:", err.message);
+                }
+            }).finally(() => setLoading(false));
     }
-    
+
     return (
         <div className="min-h-screen -my-16 -mx-4 md:-ml-[32%] md:-mr-[4%] sm:-mt-20 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 flex items-center justify-center px-8 sm:px-4 font-sans">
             <div className="backdrop-blur-md bg-white/10 border border-white/20 shadow-xl rounded-2xl p-8 w-full max-w-md text-white">
@@ -52,8 +54,9 @@ export default function Login() {
                     <button
                         onClick={handleLogin}
                         className="w-full bg-blue-600 hover:bg-blue-700 transition duration-200 text-white py-3 rounded-lg font-semibold shadow-md"
+                        disabled={loading}
                     >
-                        Login
+                        {loading ? "Logging you in..." : "Login"}
                     </button>
                 </div>
 

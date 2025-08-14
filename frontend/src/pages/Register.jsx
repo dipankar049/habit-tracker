@@ -3,30 +3,32 @@ import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function Register() {
-    const [form, setForm] = useState({ 
+    const [form, setForm] = useState({
         username: "",
         email: "",
         password: ""
     });
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
 
     const handleRegister = () => {
+        setLoading(true);
         axios.post(`${import.meta.env.VITE_NODE_URI}/auth/register`, {
             username: form.username,
             email: form.email,
             password: form.password
         })
-        .then((res) => {
-            console.log(res.data.message);
-            navigate("/login", { replace: true });
-        })
-        .catch((err) => {
-            if (err.response && err.response.data) {
-                console.log(err.response.data.message || err.response.data.error);
-            } else {
-                console.log("Unknown error:", err.message);
-            }
-        });
+            .then((res) => {
+                console.log(res.data.message);
+                navigate("/login", { replace: true });
+            })
+            .catch((err) => {
+                if (err.response && err.response.data) {
+                    console.log(err.response.data.message || err.response.data.error);
+                } else {
+                    console.log("Unknown error:", err.message);
+                }
+            }).finally(() => setLoading(false));
     }
 
     return (
@@ -62,8 +64,9 @@ export default function Register() {
                     <button
                         onClick={handleRegister}
                         className="w-full bg-green-500 hover:bg-green-600 transition duration-200 text-white py-3 rounded-lg font-semibold shadow-md"
+                        disabled={loading}
                     >
-                        Register
+                        {loading ? "Signing you up..." : "Register"}
                     </button>
                 </div>
 

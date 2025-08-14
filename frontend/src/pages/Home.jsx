@@ -4,13 +4,18 @@ import { useAuth } from "../contexts/AuthContext";
 import TaskCard from "../components/TaskCard";
 import EventCard from "../components/EventCard";
 import { Link } from "react-router-dom";
+import Loading from "../components/hierarchy/Loading";
 
 export default function Home() {
   const [tasks, setTasks] = useState([]);
   const [events, setEvents] = useState();
   const { token } = useAuth();
-  
+  const [loading, setLoading] = useState(false);
+// Simulate an error
+  // throw new Error("Oops! Something went wrong.");
+
   const fetchTasks = async () => {
+    setLoading(true);
     try {
       const res = await axios.get(
         `${import.meta.env.VITE_NODE_URI}/routine`,
@@ -18,7 +23,15 @@ export default function Home() {
       );
       setTasks(res.data);
     } catch (err) {
+      // if (!err.response) {
+      //   // Could be no internet OR server is down/not running
+      //   console.log("Unable to connect to server. Please check internet or try again later.");
+      // } else if (err.response?.status === 500) {
+      //   console.log("Server error");
+      // }
       console.log(err.response?.data?.message || err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -61,6 +74,8 @@ export default function Home() {
       console.log(err.response?.data?.message || err.message);
     }
   };
+
+  if(loading) return <Loading message="Loading your routine..." />
 
   return (
     <div className="space-y-4 sm:space-y-8">

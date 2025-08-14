@@ -3,6 +3,7 @@ import { useAuth } from "../contexts/AuthContext";
 import axios from "axios";
 import TaskModal from "../components/TaskModal";
 import { Plus } from "lucide-react";
+import Loading from "../components/hierarchy/Loading";
 
 export default function SetRoutine() {
   const [tasks, setTasks] = useState([]);
@@ -10,8 +11,10 @@ export default function SetRoutine() {
   const { token } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isTaskAddModalOpen, setIsTaskAddModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const fetchRoutine = async () => {
+    setLoading(true);
     try {
       const res = await axios.get(`${import.meta.env.VITE_NODE_URI}/routine/update`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -19,6 +22,8 @@ export default function SetRoutine() {
       setTasks(res.data);
     } catch (err) {
       console.log(err.response?.data?.message || err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -55,6 +60,7 @@ export default function SetRoutine() {
     fetchRoutine();
   }, [token]);
 
+  if(loading) return <Loading message="Loading your routine..." />
   return (
     <div>
       <div className="flex justify-between items-center my-4">
