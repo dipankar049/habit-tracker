@@ -6,7 +6,7 @@ export default function Navbar({ toggleSidebar }) {
     const { user, logout } = useAuth();
 
     return (
-        <div className='h-12 w-[100vw] flex justify-between items-center py-2 sm:px-4 shadow-xl fixed'>
+        <div className='h-12 w-full bg-white flex justify-between items-center py-2 sm:px-4 shadow-xl fixed z-50'>
             {/* Hamburger menu - visible on small screens */}
             <div className='flex items-center'>
                 <button

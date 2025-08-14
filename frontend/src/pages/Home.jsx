@@ -9,7 +9,7 @@ export default function Home() {
   const [tasks, setTasks] = useState([]);
   const [events, setEvents] = useState();
   const { token } = useAuth();
-
+  
   const fetchTasks = async () => {
     try {
       const res = await axios.get(
