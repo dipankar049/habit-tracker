@@ -117,19 +117,19 @@ function TaskCard({ task, onDelete, onUpdate, deleteLoading = false }) {
 
       {/* Right side - buttons */}
       <div className="flex gap-2 flex-wrap">
-  <button
-    onClick={onUpdate}
-    className="px-2 py-1 text-xs sm:px-3 sm:py-1 sm:text-sm bg-yellow-500 text-white rounded hover:bg-yellow-600 transition shadow-lg/20"
-  >
-    Update
-  </button>
-  <button
-    onClick={onDelete}
-    disabled={deleteLoading}
-    className="px-2 py-1 text-xs sm:px-3 sm:py-1 sm:text-sm bg-red-500 text-white rounded hover:bg-red-600 transition shadow-lg/20"
-  >
-    {deleteLoading ? "Deleting..." : "Delete"}
-  </button>
+    <button
+      onClick={onUpdate}
+      className="px-2 py-1 text-xs sm:px-3 sm:py-1 sm:text-sm bg-yellow-500 text-white rounded hover:bg-yellow-600 transition shadow-lg/20"
+    >
+      Update
+    </button>
+    <button
+      onClick={onDelete}
+      disabled={deleteLoading}
+      className="px-2 py-1 text-xs sm:px-3 sm:py-1 sm:text-sm bg-red-500 text-white rounded hover:bg-red-600 transition shadow-lg/20"
+    >
+      Delete
+    </button>
 </div>
 
     </div>

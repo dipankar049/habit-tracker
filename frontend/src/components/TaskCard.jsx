@@ -38,7 +38,7 @@ export default function TaskCard({ task, setTasks, markLoading = false, handleTo
               : "bg-green-600 hover:bg-green-700"
             }`}
         >
-          {markLoading ? "Marking" : (task.completed ? "Mark Pending" : "Mark Completed")}
+          {task.completed ? "Mark Pending" : "Mark Completed"}
         </button>
       </div>
     </div>
