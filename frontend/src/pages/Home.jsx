@@ -11,6 +11,7 @@ export default function Home() {
   const [events, setEvents] = useState();
   const { token } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [markLoading, setMarkLoading] = useState(false);
 // Simulate an error
   // throw new Error("Oops! Something went wrong.");
 
@@ -56,7 +57,7 @@ export default function Home() {
 
   // Handle status toggle
   const handleToggleStatus = async (taskId, currentStatus, duration) => {
-
+    setMarkLoading(true);
     try {
       await axios.post(
         `${import.meta.env.VITE_NODE_URI}/logTask/complete`,
@@ -72,6 +73,8 @@ export default function Home() {
       );
     } catch (err) {
       console.log(err.response?.data?.message || err.message);
+    } finally {
+      setMarkLoading(false);
     }
   };
 
@@ -121,6 +124,7 @@ export default function Home() {
                       key={task._id}
                       task={task}
                       setTasks={setTasks}
+                      markLoading={markLoading}
                       handleToggleStatus={handleToggleStatus}
                     />
                   ))

@@ -12,6 +12,7 @@ export default function SetRoutine() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isTaskAddModalOpen, setIsTaskAddModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   const fetchRoutine = async () => {
     setLoading(true);
@@ -29,6 +30,7 @@ export default function SetRoutine() {
 
   const deleteTask = async (id) => {
     if (!confirm("Are you sure you want to delete this task?")) return;
+    setDeleteLoading(true);
     try {
       await axios.delete(`${import.meta.env.VITE_NODE_URI}/routine/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -36,22 +38,8 @@ export default function SetRoutine() {
       setTasks(tasks.filter((t) => t._id !== id));
     } catch (err) {
       console.log(err.response?.data?.message || err.message);
-    }
-  };
-
-  const updateTask = async () => {
-    try {
-      await axios.put(
-        `${import.meta.env.VITE_NODE_URI}/routine/${selectedTask._id}`,
-        selectedTask,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setTasks(
-        tasks.map((t) => (t._id === selectedTask._id ? selectedTask : t))
-      );
-      setSelectedTask(null);
-    } catch (err) {
-      console.log(err.response?.data?.message || err.message);
+    } finally {
+      setDeleteLoading(false);
     }
   };
 
@@ -86,6 +74,7 @@ export default function SetRoutine() {
               key={task._id}
               task={task}
               onDelete={() => deleteTask(task._id)}
+              deleteLoading={deleteLoading}
               onUpdate={() => {
                 setSelectedTask({ ...task });
                 setIsModalOpen(true);
@@ -109,7 +98,7 @@ export default function SetRoutine() {
   );
 }
 
-function TaskCard({ task, onDelete, onUpdate }) {
+function TaskCard({ task, onDelete, onUpdate, deleteLoading = false }) {
   return (
     <div className="bg-white shadow-lg/30 rounded-lg px-4 py-2 flex justify-between items-center border border-gray-200">
       {/* Left side - task info */}
@@ -136,9 +125,10 @@ function TaskCard({ task, onDelete, onUpdate }) {
   </button>
   <button
     onClick={onDelete}
+    disabled={deleteLoading}
     className="px-2 py-1 text-xs sm:px-3 sm:py-1 sm:text-sm bg-red-500 text-white rounded hover:bg-red-600 transition shadow-lg/20"
   >
-    Delete
+    {deleteLoading ? "Deleting..." : "Delete"}
   </button>
 </div>
 

@@ -23,7 +23,7 @@ export default function ContactUs() {
     {
       icon: <Twitter className="w-6 h-6 text-sky-500" />,
       label: "Twitter",
-      href: "#",
+      href: "",
       color: "hover:text-sky-600",
     },
   ];

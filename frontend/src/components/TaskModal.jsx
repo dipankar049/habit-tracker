@@ -10,6 +10,7 @@ export default function TaskModal({
   initialData = {}
 }) {
   const { token } = useAuth();
+  const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
     title: "",
@@ -55,10 +56,12 @@ export default function TaskModal({
     }
     try {
       if (mode === "add") {
+        setLoading(true);
         await axios.post(`${import.meta.env.VITE_NODE_URI}/routine`, form, {
           headers: { Authorization: `Bearer ${token}` }
         });
       } else if (mode === "update" && initialData._id) {
+        setLoading(true);
         await axios.put(`${import.meta.env.VITE_NODE_URI}/routine/${initialData._id}`, form, {
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -75,6 +78,8 @@ export default function TaskModal({
       });
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -189,14 +194,18 @@ export default function TaskModal({
               type="button"
               onClick={onClose}
               className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+              disabled={loading}
             >
               Cancel
             </button>
             <button
               type="submit"
+              disabled={loading}
               className={`px-4 py-2 text-white rounded ${mode === "add" ? "bg-blue-600 hover:bg-blue-700" : "bg-green-600 hover:bg-green-700"}`}
             >
-              {mode === "add" ? "Add Task" : "Update Task"}
+              {mode === "add" ? 
+              (loading ? "Adding..." : "Add Task") 
+              : (loading ? "Updating..." : "Update Task")}
             </button>
           </div>
         </form>
