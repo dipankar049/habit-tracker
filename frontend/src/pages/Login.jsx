@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function Login() {
-    const [form, setForm] = useState({ email: "deep@gmail.com", password: "654321" });
+    const [form, setForm] = useState({ email: "", password: "" });
     const { login } = useAuth();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
