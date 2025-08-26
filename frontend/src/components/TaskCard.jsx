@@ -34,8 +34,8 @@ export default function TaskCard({ task, setTasks, markLoading = false, handleTo
           }
           disabled={markLoading}
           className={`px-3 py-1 text-sm sm:text-md rounded text-white shadow-lg/30 ${task.completed
-              ? "bg-gray-500 hover:bg-gray-600"
-              : "bg-green-600 hover:bg-green-700"
+            ? "bg-gray-500 hover:bg-gray-600"
+            : "bg-green-600 hover:bg-green-700"
             }`}
         >
           {task.completed ? "✅ Completed" : "⌛ Pending"}

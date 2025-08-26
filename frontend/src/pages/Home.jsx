@@ -9,7 +9,7 @@ import Loading from "../components/hierarchy/Loading";
 export default function Home() {
   const [tasks, setTasks] = useState([]);
   const [events, setEvents] = useState();
-  const { token } = useAuth();
+  const { token, logout } = useAuth();
   const [loading, setLoading] = useState(false);
   const [markLoading, setMarkLoading] = useState(false);
 // Simulate an error
@@ -30,6 +30,7 @@ export default function Home() {
       // } else if (err.response?.status === 500) {
       //   console.log("Server error");
       // }
+      if(err.response?.status == 401) logout();
       console.log(err.response?.data?.message || err.message);
     } finally {
       setLoading(false);
@@ -44,6 +45,7 @@ export default function Home() {
       );
       setEvents(res.data);
     } catch (err) {
+      if(err.response?.status == 401) logout();
       console.log(err.response?.data?.message || err.message);
     }
   };
