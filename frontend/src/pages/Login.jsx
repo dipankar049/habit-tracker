@@ -15,18 +15,18 @@ export default function Login() {
             email: form.email,
             password: form.password
         })
-            .then((res) => {
-                console.log(res.data.message);
-                login(res.data.user, res.data.token);
-                navigate("/", { replace: true });
-            })
-            .catch((err) => {
-                if (err.response && err.response.data) {
-                    console.log(err.response.data.message || err.response.data.error);
-                } else {
-                    console.log("Unknown error:", err.message);
-                }
-            }).finally(() => setLoading(false));
+        .then((res) => {
+            console.log(res.data.message);
+            login(res.data.user, res.data.token);
+            navigate("/", { replace: true });
+        })
+        .catch((err) => {
+            if (err.response && err.response.data) {
+                console.log(err.response.data.message || err.response.data.error);
+            } else {
+                console.log("Unknown error:", err.message);
+            }
+        }).finally(() => setLoading(false));
     }
 
     return (

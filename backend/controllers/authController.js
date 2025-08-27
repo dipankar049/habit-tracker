@@ -48,6 +48,11 @@ const loginUser = async(req, res) => {
                 id: user._id,
                 username: user.username,
                 email: user.email,
+                joinDate: user.joinDate,
+                avatarUrl: user.avatarUrl || "",
+                xp: user.xp || 0,
+                level: user.level || 1,
+                streak: user.streak || 0,
             }
         });
     } catch(err) {

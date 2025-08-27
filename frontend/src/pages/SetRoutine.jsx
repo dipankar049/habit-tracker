@@ -12,7 +12,8 @@ export default function SetRoutine() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isTaskAddModalOpen, setIsTaskAddModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState();
+  // const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
   const fetchRoutine = async () => {
     setLoading(true);
@@ -30,7 +31,7 @@ export default function SetRoutine() {
 
   const deleteTask = async (id) => {
     if (!confirm("Are you sure you want to delete this task?")) return;
-    setDeleteLoading(true);
+    setDeleteLoading(id);
     try {
       await axios.delete(`${import.meta.env.VITE_NODE_URI}/routine/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -39,7 +40,8 @@ export default function SetRoutine() {
     } catch (err) {
       console.log(err.response?.data?.message || err.message);
     } finally {
-      setDeleteLoading(false);
+      // await delay(1000);
+      setDeleteLoading();
     }
   };
 
@@ -48,7 +50,7 @@ export default function SetRoutine() {
     fetchRoutine();
   }, [token]);
 
-  if(loading) return <Loading message="Loading your routine..." />
+  if (loading) return <Loading message="Loading your routine..." />
   return (
     <div>
       <div className="flex justify-between items-center my-4">
@@ -98,7 +100,7 @@ export default function SetRoutine() {
   );
 }
 
-function TaskCard({ task, onDelete, onUpdate, deleteLoading = false }) {
+function TaskCard({ task, onDelete, onUpdate, deleteLoading }) {
   return (
     <div className="bg-white shadow-lg/30 rounded-lg px-4 py-2 flex justify-between items-center border border-gray-200">
       {/* Left side - task info */}
@@ -117,20 +119,20 @@ function TaskCard({ task, onDelete, onUpdate, deleteLoading = false }) {
 
       {/* Right side - buttons */}
       <div className="flex gap-2 flex-wrap">
-    <button
-      onClick={onUpdate}
-      className="px-2 py-1 text-xs sm:px-3 sm:py-1 sm:text-sm bg-yellow-500 text-white rounded hover:bg-yellow-600 transition shadow-lg/20"
-    >
-      Update
-    </button>
-    <button
-      onClick={onDelete}
-      disabled={deleteLoading}
-      className="px-2 py-1 text-xs sm:px-3 sm:py-1 sm:text-sm bg-red-500 text-white rounded hover:bg-red-600 transition shadow-lg/20"
-    >
-      Delete
-    </button>
-</div>
+        <button
+          onClick={onUpdate}
+          className="px-2 py-1 text-xs sm:px-3 sm:py-1 sm:text-sm bg-yellow-500 text-white rounded hover:bg-yellow-600 transition shadow-lg/20"
+        >
+          Update
+        </button>
+        <button
+          onClick={onDelete}
+          disabled={deleteLoading === task._id}
+          className="px-2 py-1 text-xs sm:px-3 sm:py-1 sm:text-sm bg-red-500 text-white rounded hover:bg-red-600 transition shadow-lg/20"
+        >
+          {deleteLoading === task._id ? "Deleting..." : "Delete"}
+        </button>
+      </div>
 
     </div>
   );

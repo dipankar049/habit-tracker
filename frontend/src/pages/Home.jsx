@@ -11,7 +11,6 @@ export default function Home() {
   const [events, setEvents] = useState();
   const { token, logout } = useAuth();
   const [loading, setLoading] = useState(false);
-  const [markLoading, setMarkLoading] = useState(false);
 // Simulate an error
   // throw new Error("Oops! Something went wrong.");
 
@@ -56,29 +55,6 @@ export default function Home() {
     fetchEvents();
     fetchTasks();
   }, [token]);
-
-  // Handle status toggle
-  const handleToggleStatus = async (taskId, currentStatus, duration) => {
-    setMarkLoading(true);
-    try {
-      await axios.post(
-        `${import.meta.env.VITE_NODE_URI}/logTask/complete`,
-        { taskId, duration, completed: currentStatus },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      // Update state instantly
-      setTasks((prev) =>
-        prev.map((task) =>
-          task._id === taskId ? { ...task, completed: currentStatus, defaultDuration: duration } : task
-        )
-      );
-    } catch (err) {
-      console.log(err.response?.data?.message || err.message);
-    } finally {
-      setMarkLoading(false);
-    }
-  };
 
   if(loading) return <Loading message="Loading your routine..." />
 
@@ -126,8 +102,6 @@ export default function Home() {
                       key={task._id}
                       task={task}
                       setTasks={setTasks}
-                      markLoading={markLoading}
-                      handleToggleStatus={handleToggleStatus}
                     />
                   ))
               )}
@@ -150,7 +124,6 @@ export default function Home() {
                       key={task._id}
                       task={task}
                       setTasks={setTasks}
-                      handleToggleStatus={handleToggleStatus}
                     />
                   ))
               )}
