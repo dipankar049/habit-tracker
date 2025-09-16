@@ -43,6 +43,7 @@ export default function Register() {
                         onChange={(e) => setForm({ ...form, username: e.target.value })}
                         placeholder="Username"
                         className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                        disabled={loading}
                     />
 
                     <input
@@ -51,6 +52,7 @@ export default function Register() {
                         onChange={(e) => setForm({ ...form, email: e.target.value })}
                         placeholder="Email"
                         className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                        disabled={loading}
                     />
 
                     <input
@@ -59,6 +61,7 @@ export default function Register() {
                         onChange={(e) => setForm({ ...form, password: e.target.value })}
                         placeholder="Password"
                         className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                        disabled={loading}
                     />
 
                     <button
@@ -72,9 +75,15 @@ export default function Register() {
 
                 <p className="text-center text-sm mt-6 text-gray-300">
                     Already have an account?{" "}
-                    <Link to="/login" className="text-blue-400 hover:underline font-medium">
-                        Login here
-                    </Link>
+                    {loading ? 
+                        <Link to="/login" className="text-blue-400 hover:underline font-medium">
+                            Login here
+                        </Link>
+                        :
+                        <Link className="text-gray-500 cursor-not-allowed">
+                            Login here
+                        </Link>
+                    }
                 </p>
             </div>
         </div>

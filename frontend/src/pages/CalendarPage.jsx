@@ -1,4 +1,3 @@
-// src/pages/CalendarPage.jsx
 import React, { useState, useEffect, useRef } from "react";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import format from "date-fns/format";
@@ -18,6 +17,7 @@ import "../style/calendar.css"
 import AddEventModal from "../components/AddEventModal";
 import DeleteConfirmModal from "../components/DeleteConfirmModal";
 import { useAuth } from "../contexts/AuthContext";
+import Instructions from "../components/Instructions";
 
 const locales = { "en-US": enUS };
 const localizer = dateFnsLocalizer({ format, parse, startOfWeek, getDay, locales });
@@ -43,7 +43,7 @@ export default function CalendarPage() {
       return [startOfMonth(date), endOfMonth(date)];
     }
     if (view === "week") {
-      const start = startOfWeek(date, { weekStartsOn: 0 }); // Sunday start; change if needed
+      const start = startOfWeek(date, { weekStartsOn: 0 }); // Sunday start
       const end = addDays(start, 6);
       return [start, end];
     }
@@ -63,6 +63,7 @@ export default function CalendarPage() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       const data = await res.json();
+      // console.log()
       setEvents(
         (data || []).map((ev) => ({
           id: ev._id,
@@ -152,18 +153,46 @@ export default function CalendarPage() {
     }
   };
 
-  // Custom event component to handle mouse events
-  const CustomEvent = ({ event }) => (
-    <div
-      onMouseDown={() => handleMouseDown(event)}
-      onMouseUp={() => handleMouseUp(event)}
-      onMouseLeave={handleMouseLeave}
-      style={{ cursor: "pointer", userSelect: "none" }}
-      title={event.title}
-    >
-      {event.title}
-    </div>
-  );
+  // Custom event component to handle mouse & touch events
+  const CustomEvent = ({ event }) => {
+    const handleTouchStart = (e) => {
+      e.stopPropagation(); // prevent triggering onSelectSlot (Add Task modal)
+      longPressTriggered.current = false;
+      longPressTimer.current = setTimeout(() => {
+        longPressTriggered.current = true;
+        setEventToDelete(event);
+        setDeleteModalOpen(true);
+      }, 700);
+    };
+
+    const handleTouchEnd = (e) => {
+      clearTimeout(longPressTimer.current);
+      if (!longPressTriggered.current) {
+        toggleCompletion(event);
+      }
+    };
+
+    return (
+      <div
+        onMouseDown={(e) => {
+          e.stopPropagation();
+          handleMouseDown(event);
+        }}
+        onMouseUp={(e) => {
+          e.stopPropagation();
+          handleMouseUp(event);
+        }}
+        onMouseLeave={handleMouseLeave}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        style={{ cursor: "pointer", userSelect: "none" }}
+        title={event.title}
+      >
+        {event.title}
+      </div>
+    );
+  };
+
 
   // onNavigate called when user clicks Prev/Next/Today (date param is new date)
   const handleNavigate = (date, view) => {
@@ -183,7 +212,8 @@ export default function CalendarPage() {
 
   return (
     <div>
-      <h1 className="mb-4 text-center text-2xl sm:text-3xl font-bold">Calender</h1>
+      <h1 className="mb-1 text-center text-2xl sm:text-3xl font-bold">Calender</h1>
+      <h1 className="mb-4 text-center text-md sm:text-lg">Schedule your important events on calender</h1>
       <div style={{ height: "700px" }}>
         <Calendar
           localizer={localizer}
@@ -226,6 +256,7 @@ export default function CalendarPage() {
           confirmMessage={`Are you sure you want to delete "${eventToDelete?.title}"?`}
         />
       </div>
+      <Instructions />
     </div>
   );
 }

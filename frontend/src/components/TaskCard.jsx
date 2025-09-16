@@ -33,7 +33,7 @@ export default function TaskCard({ task, setTasks }) {
   return (
     <div
       key={task._id}
-      className="bg-white shadow-lg/30 rounded-lg py-2 px-4 flex flex-col md:flex-row md:items-center md:justify-between border border-gray-200"
+      className="bg-white shadow-lg/10 rounded-lg py-2 px-4 flex flex-col md:flex-row md:items-center md:justify-between border border-gray-200"
     >
       <h2 className="text-lg font-semibold">{task.title}</h2>
 

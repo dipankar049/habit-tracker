@@ -13,11 +13,19 @@ export default function AddEventModal({ isOpen, onClose, slotInfo, token, refres
     }
   }, [isOpen]);
 
+  const normalizeToUTCMidnight = (date) => {
+    if (!date) return null;
+    const d = new Date(date);
+    return new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  };
+
   const handleSubmit = async () => {
     if (!title.trim()) return alert("Please enter a task title");
     setLoading(true);
 
     try {
+      const scheduledDateUTC = normalizeToUTCMidnight(slotInfo?.start);
+      // const endDateUTC = slotInfo?.end ? normalizeToUTCMidnight(slotInfo.end) : null;
       const res = await fetch(`${import.meta.env.VITE_NODE_URI}/events`, {
         method: "POST",
         headers: {
@@ -26,10 +34,11 @@ export default function AddEventModal({ isOpen, onClose, slotInfo, token, refres
         },
         body: JSON.stringify({
           title,
-          scheduledDate: slotInfo?.start.toISOString(),
-          endDate: slotInfo?.end ? slotInfo.end.toISOString() : null,
+          scheduledDate: scheduledDateUTC.toISOString(),
+          // endDate: endDateUTC ? endDateUTC.toISOString() : null,
         }),
       });
+
       if (!res.ok) throw new Error("Failed to add task");
       refresh();
     } catch (e) {
