@@ -19,9 +19,12 @@ import Layout from './components/hierarchy/layout';
 export default function App() {
 
   const ProtectedRoutes = () => {
-    const { token } = useAuth();
-    return token ? <Outlet /> : <Navigate to="/login" replace/>
-  }
+    const { token, loading } = useAuth();
+
+    if (loading) return <Loading message="Please wait..." />;
+
+    return token ? <Outlet /> : <Navigate to="/login" replace />;
+  };
 
   return (
     <>

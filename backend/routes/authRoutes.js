@@ -7,5 +7,8 @@ router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.get("/profile", authMiddleware, getProfile);
 router.put("/profile", authMiddleware, updateProfile);
+router.get("/verifyToken", authMiddleware, (req, res) => {
+  res.json({ valid: true, user: req.user });
+});
 
 module.exports = router;

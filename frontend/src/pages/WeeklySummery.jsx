@@ -3,17 +3,20 @@ import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
 import HorizontalBarChart from "../components/HorizontalBarChart";
 import VerticalBarChart from "../components/VerticalBarChart";
+import Loading from "../components/hierarchy/Loading";
 
 const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 export default function WeeklySummary() {
   const [summary, setSummary] = useState([]);
+  const [loadingWeeklySummery, setLoadingWeeklySummery] = useState(false);
   const [selectedDate, setSelectedDate] = useState(() => {
     return new Date().toISOString().split("T")[0];
   });
   const { token } = useAuth();
 
   const fetchSummary = async () => {
+    setLoadingWeeklySummery(true);
     try {
       const res = await axios.get(
         `${import.meta.env.VITE_NODE_URI}/logTask/weekly`,
@@ -31,6 +34,8 @@ export default function WeeklySummary() {
       setSummary(formattedData);
     } catch (err) {
       console.error(err.response?.data?.message || err.message);
+    } finally {
+      setLoadingWeeklySummery(false);
     }
   };
 
@@ -39,6 +44,8 @@ export default function WeeklySummary() {
   }, [token]);
 
   const selectedDayData = summary.find((item) => item.date === selectedDate);
+
+  if(loadingWeeklySummery) return <Loading message="Loading weekly summery..." />
 
   return (
     <div>

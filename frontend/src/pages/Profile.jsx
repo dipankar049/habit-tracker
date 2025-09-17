@@ -3,14 +3,14 @@ import { useAuth } from "../contexts/AuthContext";
 import Loading from '../components/hierarchy/Loading';
 
 export default function Profile() {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
 
   const getFallbackAvatar = (name) => {
     if (!name) return "?";
     return name.charAt(0).toUpperCase();
   };
 
-  if(!user) return <Loading message="Loading your profile..." />
+  if(loading) return <Loading message="Loading your profile..." />
   return (
     // <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
     <>

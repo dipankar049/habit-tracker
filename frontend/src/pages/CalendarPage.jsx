@@ -18,6 +18,7 @@ import AddEventModal from "../components/AddEventModal";
 import DeleteConfirmModal from "../components/DeleteConfirmModal";
 import { useAuth } from "../contexts/AuthContext";
 import Instructions from "../components/Instructions";
+import Loading from "../components/hierarchy/Loading";
 
 const locales = { "en-US": enUS };
 const localizer = dateFnsLocalizer({ format, parse, startOfWeek, getDay, locales });
@@ -32,6 +33,7 @@ export default function CalendarPage() {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [eventToDelete, setEventToDelete] = useState(null);
+  const [loadingEvents, setLoadingEvents] = useState(false);
 
   const longPressTimer = useRef(null);
   const longPressTriggered = useRef(false);
@@ -57,6 +59,7 @@ export default function CalendarPage() {
   // Fetch events from backend for a range
   const fetchEvents = async (start, end) => {
     if (!token) return;
+    setLoadingEvents(true);
     try {
       const res = await fetch(
         `${import.meta.env.VITE_NODE_URI}/events?start=${start.toISOString()}&end=${end.toISOString()}`,
@@ -75,6 +78,8 @@ export default function CalendarPage() {
       );
     } catch (error) {
       console.error("Fetch events error:", error);
+    } finally {
+      setLoadingEvents(false);
     }
   };
 
@@ -209,6 +214,8 @@ export default function CalendarPage() {
     const [s, e] = getRangeFor(view, currentDate);
     fetchEvents(s, e);
   };
+
+  if(loadingEvents) return <Loading message="Loading calender..." />
 
   return (
     <div>
