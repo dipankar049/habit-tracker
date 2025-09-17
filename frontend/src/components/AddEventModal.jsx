@@ -40,7 +40,9 @@ export default function AddEventModal({ isOpen, onClose, slotInfo, token, refres
       });
 
       if (!res.ok) throw new Error("Failed to add task");
-      refresh();
+      const { addedEvent } = await res.json();
+      refresh(addedEvent);
+      onClose();
     } catch (e) {
       alert(e.message);
     } finally {

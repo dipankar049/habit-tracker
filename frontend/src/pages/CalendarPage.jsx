@@ -112,9 +112,11 @@ export default function CalendarPage() {
         },
         body: JSON.stringify({ eventId: event.id, completed: !event.completed }),
       });
-      // refresh the current visible range
-      const [s, e] = getRangeFor(currentView, currentDate);
-      fetchEvents(s, e);
+      setEvents((prevEvents) =>
+        prevEvents.map((ev) =>
+          ev.id === event.id ? { ...ev, completed: !ev.completed, title: (!ev.completed ? "✅" : "") + ev.title.replace("✅", "") } : ev
+        )
+      );
     } catch (error) {
       alert("Error toggling completion: " + (error?.message || error));
     }
@@ -149,8 +151,7 @@ export default function CalendarPage() {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
-      const [s, e] = getRangeFor(currentView, currentDate);
-      fetchEvents(s, e);
+      setEvents((prevEvents) => prevEvents.filter((ev) => ev.id !== eventToDelete.id));
       setDeleteModalOpen(false);
       setEventToDelete(null);
     } catch (error) {
@@ -215,7 +216,7 @@ export default function CalendarPage() {
     fetchEvents(s, e);
   };
 
-  if(loadingEvents) return <Loading message="Loading calender..." />
+  if (loadingEvents) return <Loading message="Loading calender..." />
 
   return (
     <div>
@@ -245,11 +246,20 @@ export default function CalendarPage() {
           onClose={() => setAddModalOpen(false)}
           slotInfo={selectedSlot}
           token={token}
-          refresh={() => {
-            setAddModalOpen(false);
-            if (selectedSlot) {
-              const [s, e] = getRangeFor(currentView, selectedSlot.start || new Date());
-              fetchEvents(s, e);
+          refresh={(newEvent) => {
+            if (newEvent) {
+              setEvents((prev) => [
+                ...prev,
+                {
+                  id: newEvent._id,
+                  title: (newEvent.completed ? "✅" : "") + newEvent.title,
+                  start: new Date(newEvent.scheduledDate),
+                  end: newEvent.endDate
+                    ? new Date(newEvent.endDate)
+                    : new Date(newEvent.scheduledDate),
+                  completed: newEvent.completed,
+                },
+              ]);
             }
           }}
         />
