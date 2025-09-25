@@ -1,21 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
 import TaskCard from "../components/TaskCard";
 import EventCard from "../components/EventCard";
 import { Link } from "react-router-dom";
 import Loading from "../components/hierarchy/Loading";
+import { delay } from "../util/delay";
+import QuotesLoader from "../components/QuotesLoader";
 
-export default function Home() {
+export default function Home({ isFirstLoad, setIsFirstLoad }) {
   const [tasks, setTasks] = useState([]);
   const [events, setEvents] = useState();
   const { token, logout } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [showLoader, setShowLoader] = useState(isFirstLoad); // control quote loader visibility
 // Simulate an error
   // throw new Error("Oops! Something went wrong.");
 
   const fetchTasks = async () => {
     setLoading(true);
+    // await delay(6000);
     try {
       const res = await axios.get(
         `${import.meta.env.VITE_NODE_URI}/routine`,
@@ -56,7 +60,29 @@ export default function Home() {
     fetchTasks();
   }, [token]);
 
-  if(loading) return <Loading message="Loading your routine..." />
+  useEffect(() => {
+    if (!isFirstLoad) return;
+
+    let timer;
+    const start = Date.now();
+
+    const check = () => {
+      const elapsed = Date.now() - start;
+      if (!loading && elapsed >= 10000) {
+        setShowLoader(false);
+        setIsFirstLoad(false);
+      } else {
+        timer = setTimeout(check, 100);
+      }
+    };
+
+    check();
+
+    return () => clearTimeout(timer);
+  }, [loading]);
+
+  if (showLoader) return <QuotesLoader />;
+  else if(loading) return <Loading message="Loading your routine..." />
 
   return (
     <div className="space-y-4 sm:space-y-8">

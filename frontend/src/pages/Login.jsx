@@ -2,6 +2,10 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../contexts/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
+import { delay } from '../util/delay';
+import QuotesLoader from '../components/QuotesLoader';
+import { validateUserInput } from '../util/validateInput';
+import { toast } from 'react-toastify';
 
 export default function Login() {
     const [form, setForm] = useState({ email: "", password: "" });
@@ -9,26 +13,38 @@ export default function Login() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         setLoading(true);
+        const validation = validateUserInput({
+            email: form.email,
+            password: form.password
+        });
+        if(!validation.isValid) {
+            toast.error(validation.message);
+            setLoading(false);
+            return;
+        }
+
+        // await delay(10000);
         axios.post(`${import.meta.env.VITE_NODE_URI}/auth/login`, {
             email: form.email,
             password: form.password
         })
         .then((res) => {
-            console.log(res.data.message);
+            toast.success(res.data.message);
             login(res.data.user, res.data.token);
             navigate("/", { replace: true });
         })
         .catch((err) => {
-            if (err.response && err.response.data) {
-                console.log(err.response.data.message || err.response.data.error);
+            if (err.response && err?.response?.data) {
+                toast.error(err.response.data.message || err.response.data.error);
             } else {
                 console.log("Unknown error:", err.message);
             }
         }).finally(() => setLoading(false));
     }
 
+    // if(loading) return <QuotesLoader />
     return (
         <div className="min-h-screen -my-16 -mx-4 md:-ml-[32%] md:-mr-[4%] sm:-mt-20 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 flex items-center justify-center px-8 sm:px-4 font-sans">
             <div className="backdrop-blur-md bg-white/10 border border-white/20 shadow-xl rounded-2xl p-8 w-full max-w-md text-white">

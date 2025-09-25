@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+import { validateUserInput } from '../util/validateInput';
+import { toast } from 'react-toastify';
 
 export default function Register() {
     const [form, setForm] = useState({
@@ -13,22 +15,33 @@ export default function Register() {
 
     const handleRegister = () => {
         setLoading(true);
+        const validation = validateUserInput({
+            email: form.email,
+            password: form.password,
+            name: form.username,
+        });
+        if(!validation.isValid) {
+            toast.error(validation.message);
+            setLoading(false);
+            return;
+        }
+
         axios.post(`${import.meta.env.VITE_NODE_URI}/auth/register`, {
             username: form.username,
             email: form.email,
             password: form.password
         })
-            .then((res) => {
-                console.log(res.data.message);
-                navigate("/login", { replace: true });
-            })
-            .catch((err) => {
-                if (err.response && err.response.data) {
-                    console.log(err.response.data.message || err.response.data.error);
-                } else {
-                    console.log("Unknown error:", err.message);
-                }
-            }).finally(() => setLoading(false));
+        .then((res) => {
+            toast.success(res.data.message);
+            navigate("/login", { replace: true });
+        })
+        .catch((err) => {
+            if (err.response && err.response.data) {
+                toast.error(err.response.data.message || err.response.data.error);
+            } else {
+                console.log("Unknown error:", err.message);
+            }
+        }).finally(() => setLoading(false));
     }
 
     return (
@@ -75,7 +88,7 @@ export default function Register() {
 
                 <p className="text-center text-sm mt-6 text-gray-300">
                     Already have an account?{" "}
-                    {loading ? 
+                    {!loading ? 
                         <Link to="/login" className="text-blue-400 hover:underline font-medium">
                             Login here
                         </Link>

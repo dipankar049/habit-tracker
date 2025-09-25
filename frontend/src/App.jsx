@@ -15,8 +15,12 @@ import Loading from './components/hierarchy/Loading';
 import NotFound from './components/hierarchy/NotFound';
 import React from 'react';
 import Layout from './components/hierarchy/layout';
+import { ToastContainer } from 'react-toastify';
+import { useState } from 'react';
 
 export default function App() {
+
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
 
   const ProtectedRoutes = () => {
     const { token, loading } = useAuth();
@@ -29,6 +33,9 @@ export default function App() {
   return (
     <>
       <BrowserRouter>
+      <ToastContainer
+        autoClose={3000}
+      />
         <Layout>
           <Template>
             <ErrorBoundary>
@@ -38,7 +45,7 @@ export default function App() {
                   <Route path="/register" element={<Register />} />
 
                   <Route element={<ProtectedRoutes />}>
-                    <Route path="/" element={<Home />} />
+                    <Route path="/" element={<Home isFirstLoad={isFirstLoad} setIsFirstLoad={setIsFirstLoad} />} />
                     <Route path="/calender" element={<CalendarPage />} />
                     <Route path="/routine" element={<SetRoutine />} />
                     <Route path="/weeklySummery" element={<WeeklySummery />} />
