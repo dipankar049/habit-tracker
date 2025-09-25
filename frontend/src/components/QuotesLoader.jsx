@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import quotes from "../util/Quotes";
+import quotes from "../util/quotes";
 
 export default function QuotesLoader() {
   const [quote, setQuote] = useState(quotes[0]);
