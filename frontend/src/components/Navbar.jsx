@@ -1,64 +1,77 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { LogOut, LogIn, UserPlus } from "lucide-react";
+import { LogOut, LogIn, UserPlus, Menu } from "lucide-react";
 
 export default function Navbar({ toggleSidebar }) {
     const { user, logout } = useAuth();
 
     return (
-        <div className='h-12 w-full bg-white flex justify-between items-center py-2 sm:px-4 shadow-xl fixed z-50'>
-            {/* Hamburger menu - visible on small screens */}
-            <div className='flex items-center'>
-                <button
-                    className="md:hidden text-2xl"
-                    onClick={toggleSidebar}
-                >
-                    ☰
-                </button>
-                <p className='font-bold sm:font-extrabold text-2xl text-shadow-lg'>
-                    <span className='text-blue-500'>Habit</span>
-                    <span className='text-gray-800'>Tracker</span>
-                </p>
-            </div>
-            {user ?
-                <div className='flex justify-between text-lg font-bold gap-1 sm:gap-4'>
-                    <Link to="/profile" className='text-white bg-blue-500 rounded-full size-8 text-center mt-[2px] sm:mt-[6px] pt-[2px]'>
-                        {user.username.slice(0, 1).toUpperCase()}
-                    </Link>
-                    <button
-                        onClick={() => {
-                            logout();
-                            window.location.href = "/login";
-                        }}
-                        className="flex items-center gap-2 text-red-600 cursor-pointer"
-                    >
-                        {/* Icon - Always visible */}
-                        <LogOut size={20} />
+        <div className="h-14 w-full flex justify-between items-center px-4 sm:px-8 fixed z-50 bg-gray-950/80 backdrop-blur-xl border-b border-white/5">
 
-                        {/* Text - Hidden below sm */}
+            {/* Left — hamburger + logo */}
+            <div className="flex items-center gap-3">
+
+                <button
+                    className="md:hidden text-gray-400 hover:text-white transition-colors"
+                    onClick={toggleSidebar}
+                    aria-label="Toggle sidebar"
+                >
+                    <Menu size={22} />
+                </button>
+
+                <Link to="/" className="flex items-center gap-2.5 select-none">
+                    <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-indigo-500/30">
+                        H
+                    </div>
+                    <span className="text-white font-extrabold text-xl tracking-tight">
+                        HabitTracker
+                    </span>
+                </Link>
+
+            </div>
+
+            {/* Right — auth controls */}
+            {user ? (
+                <div className="flex items-center gap-3">
+
+                    <button
+                        onClick={() => { logout(); window.location.href = "/login"; }}
+                        className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium text-gray-300 bg-white/5 border border-white/10 hover:bg-white/10 hover:text-white hover:border-white/20 transition-all"
+                    >
+                        <LogOut size={16} />
                         <span className="hidden sm:inline">Logout</span>
                     </button>
+
+                    <Link
+                        to="/profile"
+                        className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-indigo-500/40 hover:shadow-indigo-500/60 hover:scale-105 transition-all"
+                    >
+                        {user.username.slice(0, 1).toUpperCase()}
+                    </Link>
+
                 </div>
-                : <div className="flex justify-between sm:text-lg font-bold gap-1 sm:gap-4">
-                    {/* Login */}
+            ) : (
+                <div className="flex items-center gap-2 sm:gap-3">
+
                     <Link
                         to="/login"
-                        className="text-blue-600 flex items-center gap-1 sm:gap-2"
+                        className="flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-lg text-sm font-medium text-gray-300 bg-white/5 border border-white/10 hover:bg-white/10 hover:text-white hover:border-white/20 transition-all"
                     >
-                        <LogIn size={20} />
+                        <LogIn size={16} />
                         <span className="hidden sm:inline">Login</span>
                     </Link>
 
-                    {/* Signup */}
                     <Link
                         to="/register"
-                        className="text-blue-600 bg-blue-100 flex items-center py-1 px-2 sm:px-4 rounded-md gap-1 sm:gap-2"
+                        className="flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-lg text-sm font-medium text-white bg-gradient-to-r from-indigo-500 to-violet-600 shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:scale-105 transition-all"
                     >
-                        <UserPlus size={20} />
-                        <span className="hidden sm:inline">Signup</span>
+                        <UserPlus size={16} />
+                        <span className="hidden sm:inline">Register</span>
                     </Link>
+
                 </div>
-            }
+            )}
+
         </div>
-    )
+    );
 }

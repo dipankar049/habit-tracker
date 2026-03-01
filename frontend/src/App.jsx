@@ -17,6 +17,7 @@ import React from 'react';
 import Layout from './components/hierarchy/layout';
 import { ToastContainer } from 'react-toastify';
 import { useState } from 'react';
+import LandingPage from './pages/LandingPage';
 
 export default function App() {
 
@@ -27,7 +28,7 @@ export default function App() {
 
     if (loading) return <Loading message="Please wait..." />;
 
-    return token ? <Outlet /> : <Navigate to="/login" replace />;
+    return token ? <Outlet /> : <Navigate to="/" replace />;
   };
 
   return (
@@ -41,11 +42,12 @@ export default function App() {
             <ErrorBoundary>
               <React.Suspense fallback={<Loading />}>
                 <Routes>
+                  <Route path="/" element={<LandingPage />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/register" element={<Register />} />
 
                   <Route element={<ProtectedRoutes />}>
-                    <Route path="/" element={<Home isFirstLoad={isFirstLoad} setIsFirstLoad={setIsFirstLoad} />} />
+                    <Route path="/home" element={<Home isFirstLoad={isFirstLoad} setIsFirstLoad={setIsFirstLoad} />} />
                     <Route path="/calender" element={<CalendarPage />} />
                     <Route path="/routine" element={<SetRoutine />} />
                     <Route path="/weeklySummery" element={<WeeklySummery />} />
