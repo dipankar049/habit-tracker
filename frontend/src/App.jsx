@@ -31,6 +31,11 @@ export default function App() {
     return token ? <Outlet /> : <Navigate to="/" replace />;
   };
 
+  const PublicHome = () => {
+    const { token } = useAuth();
+    return token ? <Navigate to="/home" replace /> : <LandingPage />;
+  };
+
   return (
     <>
       <BrowserRouter>
@@ -42,7 +47,7 @@ export default function App() {
             <ErrorBoundary>
               <React.Suspense fallback={<Loading />}>
                 <Routes>
-                  <Route path="/" element={<LandingPage />} />
+                  <Route path="/" element={<PublicHome />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/register" element={<Register />} />
 
