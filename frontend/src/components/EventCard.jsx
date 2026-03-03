@@ -9,7 +9,7 @@ export default function EventCard({ event }) {
             onClick={() => { navigate('/calender') }}
             // className="bg-white shadow rounded-lg px-4 py-2 flex items-center justify-between border border-gray-200"
             className={`relative bg-white rounded-2xl flex items-center justify-between px-4 py-3 
-                transition-all duration-200 
+                transition-all duration-200 border border-1 border-violet-400
                 shadow-sm hover:shadow-md cursor-pointer
                 ${event?.completed
                     ? "bg-green-50/40"
@@ -19,7 +19,7 @@ export default function EventCard({ event }) {
             <span
                 className="absolute top-0 right-0 text-[10px] sm:text-xs 
                 px-2 py-0.5 rounded-tr-2xl rounded-bl-lg
-                bg-violet-600 text-violet-100 
+                bg-sky-600 text-sky-100
                 font-medium tracking-wide"
             >
                 Calendar Task

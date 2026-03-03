@@ -35,7 +35,7 @@ export default function TaskCard({ task, setTasks }) {
     <div
       key={task._id}
       className={`bg-white rounded-2xl px-4 py-2 sm:py-3 
-    transition-all duration-200 
+    transition-all duration-200 border border-1 border-gray-300
     shadow-sm hover:shadow-md
     ${task.completed
           ? "bg-green-50/40"

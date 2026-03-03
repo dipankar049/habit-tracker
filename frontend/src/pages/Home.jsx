@@ -56,7 +56,18 @@ export default function Home({ isFirstLoad, setIsFirstLoad }) {
   const todayTasks = tasks.filter(task => task.isToday);
   const todayEvents = events || [];
 
-  const totalTodayItems = todayTasks.length + todayEvents.length;
+  // Merge both
+  const todayItems = [
+    ...todayEvents.map(event => ({ ...event, type: "event" })),
+    ...todayTasks.map(task => ({ ...task, type: "task" })),
+  ];
+
+  // Sort so completed goes bottom
+  const sortedTodayItems = todayItems.sort(
+    (a, b) => a.completed - b.completed
+  );
+
+  const totalTodayItems = sortedTodayItems.length;
 
   // Fetch tasks
   useEffect(() => {
@@ -136,26 +147,22 @@ export default function Home({ isFirstLoad, setIsFirstLoad }) {
               </span>
             </h2>
             <div className="space-y-2">
-              {events &&
-                events.map((event) => (
-                  <EventCard
-                    key={event._id}
-                    event={event}
+              {sortedTodayItems.map((item) =>
+                item.type === "event" ? (
+                  <EventCard key={item._id} event={item} />
+                ) : (
+                  <TaskCard
+                    key={item._id}
+                    task={item}
+                    setTasks={setTasks}
                   />
-                ))
-              }
-              {totalTodayItems === 0 ? (
-                <p className="text-gray-500 italic">No tasks scheduled for today.</p>
-              ) : (
-                tasks
-                  .filter(task => task.isToday)
-                  .map((task) => (
-                    <TaskCard
-                      key={task._id}
-                      task={task}
-                      setTasks={setTasks}
-                    />
-                  ))
+                )
+              )}
+
+              {totalTodayItems === 0 && (
+                <p className="text-gray-500 italic">
+                  No tasks scheduled for today.
+                </p>
               )}
             </div>
           </section>
