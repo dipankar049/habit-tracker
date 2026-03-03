@@ -267,10 +267,8 @@ export default function CalendarPage() {
         <DeleteConfirmModal
           isOpen={deleteModalOpen}
           onClose={() => setDeleteModalOpen(false)}
-          event={eventToDelete}
-          token={token}
           onDelete={deleteEvent}
-          confirmMessage={`Are you sure you want to delete "${eventToDelete?.title}"?`}
+          confirmMessage={`Are you sure you want to delete ${eventToDelete?.title}?`}
         />
       </div>
       <Instructions />

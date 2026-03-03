@@ -14,7 +14,7 @@ export default function Home({ isFirstLoad, setIsFirstLoad }) {
   const { token, logout } = useAuth();
   const [loading, setLoading] = useState(false);
   const [showLoader, setShowLoader] = useState(isFirstLoad); // control quote loader visibility
-// Simulate an error
+  // Simulate an error
   // throw new Error("Oops! Something went wrong.");
 
   const fetchTasks = async () => {
@@ -33,7 +33,7 @@ export default function Home({ isFirstLoad, setIsFirstLoad }) {
       // } else if (err.response?.status === 500) {
       //   console.log("Server error");
       // }
-      if(err.response?.status == 401) logout();
+      if (err.response?.status == 401) logout();
       console.log(err.response?.data?.message || err.message);
     } finally {
       setLoading(false);
@@ -48,10 +48,15 @@ export default function Home({ isFirstLoad, setIsFirstLoad }) {
       );
       setEvents(res.data);
     } catch (err) {
-      if(err.response?.status == 401) logout();
+      if (err.response?.status == 401) logout();
       console.log(err.response?.data?.message || err.message);
     }
   };
+
+  const todayTasks = tasks.filter(task => task.isToday);
+  const todayEvents = events || [];
+
+  const totalTodayItems = todayTasks.length + todayEvents.length;
 
   // Fetch tasks
   useEffect(() => {
@@ -82,23 +87,38 @@ export default function Home({ isFirstLoad, setIsFirstLoad }) {
   }, [loading]);
 
   if (showLoader) return <QuotesLoader />;
-  else if(loading) return <Loading message="Loading your routine..." />
+  else if (loading) return <Loading message="Loading your routine..." />
 
   return (
     <div className="space-y-4 sm:space-y-8">
       {/* Header */}
       <div className="text-center">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 text-shadow-lg/10">My Routine</h1>
+        <div className="text-center space-y-2">
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">
+            My Routine
+          </h1>
+          <p className="text-gray-500 text-sm sm:text-base">
+            Stay consistent. Build momentum every day.
+          </p>
+        </div>
       </div>
 
 
       {/* Today's Tasks */}
       {tasks.length === 0 ?
-        <div className="flex flex-col items-center mt-40">
-          <p className="text-center">No task found</p>
+        <div className="flex flex-col items-center justify-center py-16 pt-30 text-center">
+          <div className="text-5xl">📭</div>
+          <p className="text-gray-600 font-medium">
+            No routine set yet.
+          </p>
+          <p className="text-gray-400 text-sm">
+            Start building your daily discipline.
+          </p>
           <Link
             to="/routine"
-            className="px-4 sm:text-base py-2 mt-2 sm:mt-4 text-sm sm:text-md rounded text-white shadow-lg/30 bg-green-600 hover:bg-green-700"
+            className="px-4 py-2 mt-2 rounded-xl text-white shadow-md 
+    bg-gradient-to-r from-violet-600 to-purple-600 
+    hover:from-violet-700 hover:to-purple-700 transition"
           >
             Set Routine
           </Link>
@@ -106,10 +126,16 @@ export default function Home({ isFirstLoad, setIsFirstLoad }) {
         :
         (<div>
           <section>
-            <h2 className="text-lg sm:text-xl font-semibold text-green-700 mb-4 flex items-center gap-2">
-              ✅ Today’s Tasks
+            <h2 className="text-xl font-semibold text-gray-800 mb-3 flex items-center justify-between">
+              <span className="flex items-center gap-2">
+                🌤 Today’s Tasks
+              </span>
+
+              <span className="text-sm bg-violet-100 text-violet-600 px-3 py-1 rounded-full">
+                {totalTodayItems}
+              </span>
             </h2>
-            <div className="space-y-4">
+            <div className="space-y-2">
               {events &&
                 events.map((event) => (
                   <EventCard
@@ -118,7 +144,7 @@ export default function Home({ isFirstLoad, setIsFirstLoad }) {
                   />
                 ))
               }
-              {tasks.filter(task => task.isToday).length === 0 ? (
+              {totalTodayItems === 0 ? (
                 <p className="text-gray-500 italic">No tasks scheduled for today.</p>
               ) : (
                 tasks
@@ -136,7 +162,7 @@ export default function Home({ isFirstLoad, setIsFirstLoad }) {
 
 
           <section>
-            <h2 className="text-xl font-semibold text-gray-700 mb-4 flex items-center gap-2 mt-4">
+            <h2 className="text-xl font-semibold text-gray-800 my-3 flex items-center gap-2">
               📋 Other Tasks
             </h2>
             <div className="space-y-4">

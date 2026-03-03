@@ -9,15 +9,16 @@ export default function Navbar({ toggleSidebar }) {
         <div className="h-14 w-full flex justify-between items-center px-4 sm:px-8 fixed z-50 bg-gray-950/80 backdrop-blur-xl border-b border-white/5">
 
             {/* Left — hamburger + logo */}
-            <div className="flex items-center gap-3">
-
-                <button
-                    className="md:hidden text-gray-400 hover:text-white transition-colors"
-                    onClick={toggleSidebar}
-                    aria-label="Toggle sidebar"
-                >
-                    <Menu size={22} />
-                </button>
+            <div className="flex items-center">
+                {user && (
+                    <button
+                        className="md:hidden text-gray-400 hover:text-white transition-colors -ml-2 mr-2"
+                        onClick={toggleSidebar}
+                        aria-label="Toggle sidebar"
+                    >
+                        <Menu size={22} />
+                    </button>
+                )}
 
                 <Link to="/" className="flex items-center gap-2.5 select-none">
                     <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-indigo-500/30">

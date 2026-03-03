@@ -3,24 +3,28 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #fff;
-  padding: 25px;
-  border-radius: 8px;
-  max-width: 400px;
-  width: 90%;
-  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  
+  background: #ffffff;
+  padding: 28px;
+
+  border-radius: 20px;
+  width: 92%;
+  max-width: 420px;
+
+  border: 1px solid rgba(0, 0, 0, 0.08);  /* subtle edge definition */
+
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.15),   /* depth */
+    0 2px 6px rgba(0, 0, 0, 0.05);     /* sharp edge */
+
   z-index: 1001;
-  font-family: Arial, sans-serif;
 }
 
 .overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0,0,0,0.5);
-  z-index: 1000;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(3px);
 }
 
 .input-field,

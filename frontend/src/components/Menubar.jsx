@@ -7,20 +7,20 @@ export default function Menubar({ isOpen, closeSidebar }) {
   const { logout } = useAuth();
 
   const menuItems = [
-    { icon: <House />, label: "Home", to: "/" },
+    { icon: <House />, label: "Home", to: "/home" },
     { icon: <FileSliders />, label: "Set Routine", to: "/routine" },
     { icon: <CalendarCog />, label: "Calender", to: "/calender" },
     { icon: <TextSearch />, label: "Weekly Summery", to: "/weeklySummery" },
     { icon: <CalendarDays />, label: "Summery", to: "/summery" },
     // { label: "Restore", to: "/restore" },
     { icon: <UserRound />, label: "Contact Us", to: "/contact" },
-    { icon: <LogOut />, label: "Logout", to: "/login" },
+    // { icon: <LogOut />, label: "Logout", to: "/login" },
   ];
 
   return (
     <>
       {/* Desktop sidebar */}
-      <div className="hidden overflow-y-auto md:text-lg md:block fixed w-1/5 h-screen bg-white pt-4 pl-3 border-r-2 border-gray-300 drop-shadow-lg dark:bg-gray-800 dark:text-white">
+      <div className="hidden md:block fixed w-1/5 h-screen overflow-y-auto bg-white pt-6 px-3 border-r border-gray-200 shadow-sm dark:bg-gray-800 dark:border-gray-700">
         <div className="p-2 space-y-1">
           {menuItems.map(({ label, to, icon }) => (
             <MenuItem key={to} label={label} to={to} logout={logout} icon={icon} />
@@ -46,7 +46,7 @@ const MenuItem = ({ label, to, onClick, logout, icon }) => (
   <>
     <Link
       to={to}
-      className="flex items-center gap-3 w-full p-2 pl-4 text-gray-800 dark:text-white rounded-r-3xl rounded-l-md hover:text-xl hover:font-bold hover:text-blue-600 dark:hover:text-blue-600 transition-all duration-200 ease-in-out"
+      className="flex items-center gap-3 w-full px-4 py-3 text-gray-700 dark:text-gray-200 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 dark:hover:bg-gray-700 transition duration-200"
       onClick={() => {
         if(label === "Logout") logout();
         else onClick();
@@ -55,6 +55,6 @@ const MenuItem = ({ label, to, onClick, logout, icon }) => (
       <span>{icon}</span>
       <span>{label}</span>
     </Link>
-    <hr className="border-gray-300 mx-3 my-1" />
+    <hr className="border-gray-200 dark:border-gray-700 mx-2 my-1" />
   </>
 );

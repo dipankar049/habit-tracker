@@ -55,7 +55,7 @@ export default function AddEventModal({ isOpen, onClose, slotInfo, token, refres
       isOpen={isOpen}
       onRequestClose={onClose}
       contentLabel="Add Task"
-      className="modal"
+      className="addEditModal"
       overlayClassName="overlay"
     >
       <h2 className="text-xl font-bold">Add Event</h2>
