@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
+import "../style/addEventModal.css"
 
 Modal.setAppElement("#root");
 
@@ -55,10 +56,10 @@ export default function AddEventModal({ isOpen, onClose, slotInfo, token, refres
       isOpen={isOpen}
       onRequestClose={onClose}
       contentLabel="Add Task"
-      className="addEditModal"
+      className="addEditModal max-w-[300px] sm:max-w-[400px] p-4 sm:p-6"
       overlayClassName="overlay"
     >
-      <h2 className="text-xl font-bold">Add Event</h2>
+      <h2 className="font-bold text-md sm:text-lg">Add Event</h2>
 
       <input
         type="text"
@@ -66,14 +67,22 @@ export default function AddEventModal({ isOpen, onClose, slotInfo, token, refres
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         disabled={loading}
-        className="input-field"
+        className="input-field my-1 sm:my-2 p-1 sm:p-2 text-sm sm:text-base"
       />
 
       <div className="modal-actions">
-        <button onClick={handleSubmit} disabled={loading}>
+        <button 
+          onClick={handleSubmit} 
+          disabled={loading}
+          className="btn px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-base"
+        >
           {loading ? "Adding..." : "Add Task"}
         </button>
-        <button onClick={onClose} disabled={loading}>
+        <button 
+          onClick={onClose} 
+          disabled={loading}
+          className="btn px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-base"
+        >
           Cancel
         </button>
       </div>

@@ -29,7 +29,7 @@
 } */
 
 /* modal.css or global CSS */
-.modal {
+/* .modal {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -99,4 +99,4 @@
 .modal-actions button:last-child {
   background-color: #ccc;
   color: #333;
-}
+} */
