@@ -12,7 +12,7 @@ export default function Instructions() {
   }, []);
 
   return (
-    <div className="text-end p-4 text-red-600 text-sm">
+    <div className="text-right mt-4 text-gray-800 text-xs sm:text-sm space-y-1">
       {isMobile ? (
         <>
           <p>*Long press on cell to add event</p>

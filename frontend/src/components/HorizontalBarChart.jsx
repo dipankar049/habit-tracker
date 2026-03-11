@@ -18,7 +18,7 @@ export default function HorizontalBarChart({ data, selectedDate, onBarClick }) {
                 margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
                 barSize={80}
             >
-                <CartesianGrid strokeDasharray="3 3" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
                 <XAxis dataKey="dayName" tick={{ fontSize: 14, fill: "#4B5563" }} />
                 <YAxis
                     label={{
@@ -35,9 +35,10 @@ export default function HorizontalBarChart({ data, selectedDate, onBarClick }) {
                     formatter={(value) => `${value} hrs`}
                     labelFormatter={(label) => `Day: ${label}`}
                     contentStyle={{
-                        backgroundColor: "#F9FAFB",
-                        borderRadius: "8px",
-                        borderColor: "#D1D5DB",
+                        backgroundColor: "#ffffff",
+                        borderRadius: "10px",
+                        border: "1px solid #E5E7EB",
+                        boxShadow: "0 4px 12px rgba(0,0,0,0.08)"
                     }}
                     itemStyle={{ color: "#4B5563" }}
                 />

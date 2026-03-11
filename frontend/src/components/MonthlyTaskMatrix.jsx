@@ -7,21 +7,23 @@ export default function MonthlyTaskMatrix({ data }) {
   const daysArray = Array.from({ length: daysInMonth }, (_, i) => i + 1);
 
   return (
-    <div className="overflow-x-auto p-2">
+    <div className="overflow-x-auto">
       <div
         className="inline-grid border rounded-md"
         style={{
-          gridTemplateColumns: `140px repeat(${daysInMonth}, minmax(20px, 1fr))`,
+          gridTemplateColumns: `120px repeat(${daysInMonth}, minmax(24px, 1fr))`,
         }}
       >
         {/* Header row */}
-        <div className="bg-gray-200 font-bold px-2 py-1 text-xs sm:text-base sticky left-0 z-20">
+        <div className="bg-gray-100 font-semibold px-2 py-1 text-xs sm:text-sm
+sticky left-0 z-20 border-r">
           Task
         </div>
         {daysArray.map((day) => (
           <div
             key={day}
-            className="bg-gray-200 text-center font-semibold text-[10px] sm:text-xs border-l sticky top-0 z-10"
+            className="bg-gray-100 text-center text-[10px] sm:text-xs 
+font-medium border-l sticky top-0 z-10"
           >
             {day}
           </div>
@@ -31,7 +33,8 @@ export default function MonthlyTaskMatrix({ data }) {
         {tasks.map((task) => (
           <React.Fragment key={task.taskId}>
             {/* Task name */}
-            <div className="bg-gray-50 border-t px-2 py-1 text-[11px] sm:text-xs sticky left-0 z-10 truncate">
+            <div className="bg-gray-50 border-t px-2 py-1 text-[11px] sm:text-xs 
+sticky left-0 z-10 border-r truncate">
               {task.title}
             </div>
 
@@ -58,7 +61,12 @@ export default function MonthlyTaskMatrix({ data }) {
               return (
                 <div
                   key={day}
-                  className={`border-t border-l w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center cursor-pointer ${intensity} hover:scale-105 transition-transform duration-150`}
+                  className={`border-t border-l 
+                    w-6 h-6 sm:w-7 sm:h-7 
+                    flex items-center justify-center
+                    cursor-pointer
+                    ${intensity}
+                    hover:scale-110 transition-transform duration-150`}
                   title={
                     isCompleted
                       ? `${minutes} min spent`

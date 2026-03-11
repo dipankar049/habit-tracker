@@ -1,8 +1,14 @@
 .rbc-event {
-    background-color: #63cccc;
-    font-weight: 500;
-    border: 1px solid black;
-    color: black;
+  background-color: #8b5cf6;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 13px;
+  padding: 2px 6px;
+}
+
+.rbc-event:hover {
+  background-color: #7c3aed;
 }
 
 .rbc-event-content span{
@@ -10,41 +16,55 @@
 }
 
 .rbc-header {
-    background-color: #282D3C;
-    color: white;
-    height: 35px;
-    border-radius: 4px;
-    font-size: large;
-    font-family: serif;
-    padding-top: 2px;
-    border: 2px solid black;
-    margin-bottom: 1px;
+  background-color: #f9fafb;
+  color: #374151;
+  font-weight: 600;
+  font-size: 14px;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 6px 0;
 }
 
 .rbc-day-bg {
     /* background-color: #F1EA7F; */
     /* background-color: rgba(236, 235, 235, 0.832); */
     background-color: white;
-    border: 2px solid black;
+    border: 1px solid #e5e7eb;
     border-radius: 4px;
     /* font-weight: bold; */
     /* margin-left: 1px; */
 }
 
+.rbc-time-view {
+  border: 1px solid #e5e7eb;
+}
+
+.rbc-time-content {
+  border-top: 1px solid #e5e7eb;
+}
+
 .rbc-today {
-    background-color: #dcfce7;
-    /* color: blue; */
+  background-color: #ecfdf5;
 }
 
 .rbc-button-link {
     font-weight: bold;
 }
 
-.rbc-btn-group {
-    border: 1px solid black;
-    border-radius: 4px;
-    font-weight: bold;
-    background-color: white;
+.rbc-btn-group button {
+  border: 1px solid #e5e7eb;
+  background: white;
+  padding: 4px 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.rbc-btn-group button:hover {
+  background: #f3f4f6;
+}
+
+.rbc-active {
+  background: #8b5cf6 !important;
+  color: white !important;
 }
 
 .rbc-toolbar-label {
@@ -59,8 +79,4 @@
 
 .rbc-time-content {
     border: 1px solid black;
-}
-
-.rbc-label {
-    /* border: 2px solid black; */
 }

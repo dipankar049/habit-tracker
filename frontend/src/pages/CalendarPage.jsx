@@ -220,9 +220,15 @@ export default function CalendarPage() {
 
   return (
     <div>
-      <h1 className="mb-1 text-center text-2xl sm:text-3xl font-bold">Calender</h1>
-      <h1 className="mb-4 text-center text-md sm:text-lg">Schedule your important events on calender</h1>
-      <div style={{ height: "700px" }}>
+      <div className="text-center mb-5 space-y-1">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
+          My Calendar
+        </h1>
+        <p className="text-gray-500 text-sm sm:text-base">
+          Schedule and manage your important events
+        </p>
+      </div>
+      <div className="h-[650px] sm:h-[700px]">
         <Calendar
           localizer={localizer}
           events={events}

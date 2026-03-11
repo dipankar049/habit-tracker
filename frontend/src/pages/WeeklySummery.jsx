@@ -49,12 +49,17 @@ export default function WeeklySummary() {
 
   return (
     <div>
-      <div className="bg-white rounded-lg shadow-md py-4">
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
-          Weekly Summary
-        </h2>
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6">
+        <div className="text-center mb-6 space-y-1">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
+            Weekly Summary
+          </h1>
+          <p className="text-gray-500 text-sm sm:text-base">
+            Track how much time you spend on your habits
+          </p>
+        </div>
 
-        <div className="w-full h-64 sm:h-80">
+        <div className="w-full h-[240px] sm:h-[320px]">
           <HorizontalBarChart
             data={summary}
             selectedDate={selectedDate}
@@ -66,12 +71,12 @@ export default function WeeklySummary() {
           Total time spent per day on your tasks.
         </p>
       </div>
-      <div className="bg-white rounded-lg shadow-md mt-4 py-4">
-        <h3 className="text-xl font-semibold mb-4 text-gray-700 text-center">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 mt-5 p-4 sm:p-6">
+        <h3 className="text-lg sm:text-xl font-semibold mb-4 text-gray-700 text-center">
           Task Breakdown for {selectedDayData ? selectedDayData.dayName : ""}
         </h3>
 
-        <div className="w-full h-64 sm:h-80 -ml-14">
+        <div className="w-full h-[240px] sm:h-[320px]">
           {selectedDayData && selectedDayData.tasks.length > 0 ? (
             <VerticalBarChart tasks={selectedDayData.tasks} />
           ) : (

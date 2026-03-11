@@ -21,9 +21,15 @@ export default function Navbar({ toggleSidebar }) {
                 )}
 
                 <Link to="/" className="flex items-center gap-2.5 select-none">
-                    <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-indigo-500/30">
+                    {/* <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-indigo-500/30">
                         H
-                    </div>
+                    </div> */}
+                    <img
+                        src={'/habitTracker.png'}
+                        alt="HabitTracker logo"
+                        className="h-7 w-auto object-contain"
+                    />
+
                     <span className="text-white font-extrabold text-xl tracking-tight">
                         HabitTracker
                     </span>
