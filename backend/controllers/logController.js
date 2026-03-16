@@ -129,6 +129,7 @@ const getWeeklySummary = async (req, res) => {
     const logs = await TaskLog.find({
       userId,
       date: { $gte: startOfWeek, $lte: endOfWeek },
+      completed: true,
     }).populate("taskId", "title"); 
     // "title" is the field in RoutineTask you want — adjust if your schema calls it differently
 
@@ -157,7 +158,7 @@ const getWeeklySummary = async (req, res) => {
         totalHours: +(totalMinutes / 60).toFixed(2),
         tasks: tasks.map(t => ({
           ...t.toObject(),
-          taskName: t.taskId?.title || "Unnamed Task" // Add taskName for frontend
+          taskName: t.taskId?.title || "Deleted Task"
         }))
       };
     });
